@@ -1,0 +1,239 @@
+[
+  {
+    "id": "q009",
+    "split": "test",
+    "question": "SEARCH_429_LIMIT 需要重新登录吗？",
+    "relevant_ids": [
+      "ops.limit"
+    ],
+    "reference_answer": "不需要重新登录，遵循Retry-After并指数退避，配额60次每分钟。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "answer": "SEARCH_429_LIMIT 不需要重新登录。",
+    "refused": false,
+    "evidence": [
+      {
+        "id": "ops.limit",
+        "title": "限流",
+        "text": "SEARCH_429_LIMIT 表示项目超过每分钟 60 次查询的限制。客户端遵循 Retry-After 响应头，使用指数退避。限流与访问令牌过期是两种错误，不能通过重新申请令牌绕过配额。",
+        "source": "data/docs/ops.md"
+      },
+      {
+        "id": "ops.empty",
+        "title": "空结果",
+        "text": "SEARCH_204_EMPTY 表示权限过滤和当前版本过滤后没有可用片段。检查文档是否入库、项目权限以及版本状态。不能跨项目取消权限过滤以凑出回答。",
+        "source": "data/docs/ops.md"
+      },
+      {
+        "id": "index.version",
+        "title": "迁移校验",
+        "text": "更换 Embedding 模型时必须重新生成所有文档向量，建立新索引并运行固定评测集。不能只更新查询向量模型而继续复用旧模型产生的文档向量。",
+        "source": "data/docs/index.md"
+      }
+    ],
+    "generation_ms": 676.4462919963989,
+    "mode": "本地Qwen生成",
+    "cited_ids": [],
+    "invalid_citations": [],
+    "human_review": "待审核；引用ID合法不代表引用支持结论",
+    "retrieval_ms": 66.59500200476032,
+    "startup_and_index_ms": 2282.628000000841
+  },
+  {
+    "id": "q016",
+    "split": "test",
+    "question": "检索器怎样找到用词不同但意思接近的内容？",
+    "relevant_ids": [
+      "search.dense"
+    ],
+    "reference_answer": "通过Embedding向量相似度，注意罕见标识符可能混淆。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "answer": "BM25 方法可以用来找到用词不同但意思接近的内容。",
+    "refused": false,
+    "evidence": [
+      {
+        "id": "search.bm25",
+        "title": "关键词召回",
+        "text": "BM25 是关键词检索方法，适合错误码、产品编号和专业名词等精确词项。中文先进行分词。它使用词频、逆文档频率和长度归一化打分；相同意思但完全不同的措辞可能召回不足。",
+        "source": "data/docs/search.md"
+      },
+      {
+        "id": "search.dense",
+        "title": "语义召回",
+        "text": "Embedding 将问题和片段映射到稠密向量，归一化后通过点积计算余弦相似度。语义检索擅长同义改写，但数字相近、否定关系和罕见标识符可能混淆。查询和文档必须使用同一套兼容的向量模型。",
+        "source": "data/docs/search.md"
+      },
+      {
+        "id": "ingest.duplicate",
+        "title": "去重与更新",
+        "text": "使用 document_id 与内容 SHA-256 判断文档是否变化。内容相同则跳过重复入库；版本更新先写新片段并校验，再原子切换可见版本，最后删除旧版本片段。",
+        "source": "data/docs/ingest.md"
+      }
+    ],
+    "generation_ms": 701.3390409993008,
+    "mode": "本地Qwen生成",
+    "cited_ids": [],
+    "invalid_citations": [],
+    "human_review": "待审核；引用ID合法不代表引用支持结论",
+    "retrieval_ms": 48.05904199020006,
+    "startup_and_index_ms": 2282.628000000841
+  },
+  {
+    "id": "q019",
+    "split": "test",
+    "question": "Bi-Encoder 和 Cross-Encoder 怎么分工？",
+    "relevant_ids": [
+      "search.dense",
+      "rerank.cross"
+    ],
+    "reference_answer": "前者分别编码并召回，后者问题片段成对打分，仅重排候选。",
+    "type": "多证据",
+    "label_status": "AI初稿，待用户审核",
+    "answer": "[search.rrf] 混合检索 分别从 BM25 和向量检索获取前 8 个候选，再通过 RRF 合并。",
+    "refused": false,
+    "evidence": [
+      {
+        "id": "rerank.cross",
+        "title": "交叉编码器",
+        "text": "Cross-Encoder 把问题与每个候选片段成对输入模型，对相关性重新打分，再选出前 3 个片段供回答使用。它与先分别编码再比较向量的 Bi-Encoder 不同，计算开销更大，所以只处理候选集。",
+        "source": "data/docs/rerank.md"
+      },
+      {
+        "id": "search.rrf",
+        "title": "混合检索",
+        "text": "混合检索分别从 BM25 和向量检索获取前 8 个候选，再通过 RRF 合并。RRF 对每一路排名贡献 1/(60+rank)，重复片段累加贡献。使用排名融合是为了避免直接相加不同量纲的原始分数。",
+        "source": "data/docs/search.md"
+      },
+      {
+        "id": "delivery.owner",
+        "title": "参与分工",
+        "text": "项目参与者可负责界定使用场景、审核测试问题、判断证据相关性、分析错误和选择方案。代码由 AI 辅助生成时，应如实区分代码实现与本人完成的实验判断；没有参与过的工作不能写成独立完成。",
+        "source": "data/docs/delivery.md"
+      }
+    ],
+    "generation_ms": 1358.4944579924922,
+    "mode": "本地Qwen生成",
+    "cited_ids": [
+      "search.rrf"
+    ],
+    "invalid_citations": [],
+    "human_review": "待审核；引用ID合法不代表引用支持结论",
+    "retrieval_ms": 54.65841601835564,
+    "startup_and_index_ms": 2282.628000000841
+  },
+  {
+    "id": "q021",
+    "split": "test",
+    "question": "找对第一条资料就能证明多个依据全找全了吗？",
+    "relevant_ids": [
+      "eval.recall",
+      "eval.rank"
+    ],
+    "reference_answer": "不能，MRR看首条，Recall计算全部相关片段覆盖。",
+    "type": "多证据",
+    "label_status": "AI初稿，待用户审核",
+    "answer": "[eval.rank] 排序指标\n\n- MRR@k 关注第一个相关结果的位置，倒数排名越高越好。\n- nDCG@k 可以衡量多个相关结果的排列质量。\n\n这两个指标并不能直接证明最终回答正确，也不能证明引用支持所有结论。\n\n[delivery.accept] 验收清单\n\n- 验收至少保留一个精确匹配案例、一个同义改写案例、一个多证据案例和一个无答案案例。\n- 每个案例保存问题、候选排序、引用片段与答案，并注明是否经过人工审核。",
+    "refused": false,
+    "evidence": [
+      {
+        "id": "eval.rank",
+        "title": "排序指标",
+        "text": "MRR@k 关注第一个相关结果的位置，倒数排名越高越好；nDCG@k 可以衡量多个相关结果的排列质量。两者都不能直接证明最终回答正确，也不能证明引用支持所有结论。",
+        "source": "data/docs/eval.md"
+      },
+      {
+        "id": "eval.recall",
+        "title": "召回指标",
+        "text": "Recall@k 等于前 k 个结果中检出的相关片段数除以全部标注相关片段数。一个问题可能需要多个片段共同回答，不能把只找到其中一条的命中率当成完整召回率。",
+        "source": "data/docs/eval.md"
+      },
+      {
+        "id": "delivery.accept",
+        "title": "验收清单",
+        "text": "验收至少保留一个精确匹配案例、一个同义改写案例、一个多证据案例和一个无答案案例。每个案例保存问题、候选排序、引用片段与答案，并注明是否经过人工审核。",
+        "source": "data/docs/delivery.md"
+      }
+    ],
+    "generation_ms": 3603.4680000011576,
+    "mode": "本地Qwen生成",
+    "cited_ids": [
+      "eval.rank",
+      "delivery.accept"
+    ],
+    "invalid_citations": [],
+    "human_review": "待审核；引用ID合法不代表引用支持结论",
+    "retrieval_ms": 41.69645700312685,
+    "startup_and_index_ms": 2282.628000000841
+  },
+  {
+    "id": "q037",
+    "split": "test",
+    "question": "这个系统的生产QPS能到多少？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足，小规模演示不能推算生产QPS。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "answer": "资料不足，无法根据当前知识库回答。",
+    "refused": true,
+    "evidence": [
+      {
+        "id": "legacy.limit",
+        "title": "废弃配额",
+        "text": "历史版本 Atlas v0 曾限制每分钟 30 次查询；本规则已废弃。当前 v1 限制是每分钟 60 次查询，参见运行与排障。不要从这条历史记录推出当前仍为 30 次。",
+        "source": "data/docs/legacy.md"
+      },
+      {
+        "id": "ingest.formats",
+        "title": "支持格式",
+        "text": "接入支持 UTF-8 的 Markdown、TXT 和可复制文字的 PDF。单个文件上限为 20 MB。扫描 PDF 需要先执行 OCR；空文本、乱码和没有正文的文件进入失败队列，不直接建立索引。",
+        "source": "data/docs/ingest.md"
+      },
+      {
+        "id": "rerank.cross",
+        "title": "交叉编码器",
+        "text": "Cross-Encoder 把问题与每个候选片段成对输入模型，对相关性重新打分，再选出前 3 个片段供回答使用。它与先分别编码再比较向量的 Bi-Encoder 不同，计算开销更大，所以只处理候选集。",
+        "source": "data/docs/rerank.md"
+      }
+    ],
+    "generation_ms": 0,
+    "mode": "开发集阈值拒答",
+    "retrieval_ms": 39.957290995516814,
+    "startup_and_index_ms": 2282.628000000841
+  },
+  {
+    "id": "q038",
+    "split": "test",
+    "question": "Atlas 的创始人毕业于哪所大学？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "answer": "资料不足，无法根据当前知识库回答。",
+    "refused": true,
+    "evidence": [
+      {
+        "id": "access.token",
+        "title": "访问令牌",
+        "text": "Atlas 为虚构的研发资料平台，本库所有规则仅用于练习。调用 API 时在 Authorization 请求头发送 Bearer 访问令牌。令牌有效期为 2 小时；过期返回 AUTH_401_EXPIRED。客户端应重新申请令牌，然后最多重试一次。不要在日志中记录完整令牌。",
+        "source": "data/docs/access.md"
+      },
+      {
+        "id": "delivery.local",
+        "title": "本地练习",
+        "text": "本项目演示使用本地小模型和内存中的精确向量搜索，适合小规模学习资料。没有部署生产服务，也没有接入企业真实文档。小规模合成题表现不能推算百万文档吞吐或真实用户满意度。",
+        "source": "data/docs/delivery.md"
+      },
+      {
+        "id": "index.version",
+        "title": "迁移校验",
+        "text": "更换 Embedding 模型时必须重新生成所有文档向量，建立新索引并运行固定评测集。不能只更新查询向量模型而继续复用旧模型产生的文档向量。",
+        "source": "data/docs/index.md"
+      }
+    ],
+    "generation_ms": 0,
+    "mode": "开发集阈值拒答",
+    "retrieval_ms": 48.70904199196957,
+    "startup_and_index_ms": 2282.628000000841
+  }
+]

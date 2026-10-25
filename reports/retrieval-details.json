@@ -1,0 +1,2793 @@
+[
+  {
+    "id": "q001",
+    "split": "dev",
+    "question": "AUTH_401_EXPIRED 怎么处理？",
+    "relevant_ids": [
+      "access.token"
+    ],
+    "reference_answer": "令牌过期，重新申请，最多重试一次。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "access.token",
+        "answer.conflict",
+        "rerank.cross",
+        "ops.empty",
+        "ops.timeout",
+        "ops.limit",
+        "cache.log",
+        "ingest.chunk"
+      ],
+      "dense": [
+        "ops.limit",
+        "ops.empty",
+        "ops.timeout",
+        "legacy.redirect",
+        "rerank.cross",
+        "access.token",
+        "answer.ground",
+        "eval.recall"
+      ],
+      "hybrid": [
+        "ops.empty",
+        "access.token",
+        "ops.limit",
+        "ops.timeout",
+        "rerank.cross",
+        "answer.conflict",
+        "legacy.redirect",
+        "answer.ground"
+      ],
+      "rerank": [
+        "access.token",
+        "answer.conflict",
+        "answer.ground",
+        "rerank.cross",
+        "legacy.redirect",
+        "ops.timeout",
+        "ops.limit",
+        "ops.empty"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.23466699349228293,
+      "dense": 2.768124992144294,
+      "hybrid": 3.011707987752743,
+      "rerank": 46.388666989514604
+    },
+    "rerank_scores": {
+      "access.token": 3.6662111282348633,
+      "answer.conflict": -3.3906404972076416,
+      "answer.ground": -4.7288899421691895,
+      "rerank.cross": -5.7872796058654785,
+      "legacy.redirect": -6.157788276672363,
+      "ops.timeout": -6.710895538330078,
+      "ops.limit": -7.622875690460205,
+      "ops.empty": -8.027851104736328
+    },
+    "top_score": 3.6662111282348633
+  },
+  {
+    "id": "q002",
+    "split": "dev",
+    "question": "文档太长应该怎么拆？",
+    "relevant_ids": [
+      "ingest.chunk"
+    ],
+    "reference_answer": "按标题段落切分，目标400字，重叠60字。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ingest.chunk",
+        "index.version",
+        "delivery.local",
+        "cache.retain",
+        "ops.empty",
+        "access.role",
+        "search.bm25",
+        "index.fresh"
+      ],
+      "dense": [
+        "ingest.duplicate",
+        "ingest.chunk",
+        "index.delete",
+        "answer.ground",
+        "answer.attack",
+        "index.version",
+        "ingest.formats",
+        "ops.empty"
+      ],
+      "hybrid": [
+        "ingest.chunk",
+        "index.version",
+        "ops.empty",
+        "ingest.duplicate",
+        "delivery.local",
+        "index.delete",
+        "answer.ground",
+        "cache.retain"
+      ],
+      "rerank": [
+        "ingest.chunk",
+        "index.delete",
+        "index.version",
+        "cache.retain",
+        "ingest.duplicate",
+        "answer.ground",
+        "ops.empty",
+        "delivery.local"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.20054099150002003,
+      "dense": 2.707083011046052,
+      "hybrid": 2.915998993557878,
+      "rerank": 38.80129099707119
+    },
+    "rerank_scores": {
+      "ingest.chunk": -0.23991245031356812,
+      "index.delete": -2.45764422416687,
+      "index.version": -3.0189361572265625,
+      "cache.retain": -3.524303436279297,
+      "ingest.duplicate": -3.576866388320923,
+      "answer.ground": -4.6444411277771,
+      "ops.empty": -5.885484218597412,
+      "delivery.local": -7.050634384155273
+    },
+    "top_score": -0.23991245031356812
+  },
+  {
+    "id": "q003",
+    "split": "dev",
+    "question": "为什么要合并两路检索的名次，而不是直接加分数？",
+    "relevant_ids": [
+      "search.rrf"
+    ],
+    "reference_answer": "RRF避免不同量纲分数直接相加。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "search.rrf",
+        "index.fresh",
+        "experiment.ablation",
+        "legacy.redirect",
+        "ingest.formats",
+        "index.version",
+        "answer.attack",
+        "cache.retain"
+      ],
+      "dense": [
+        "search.rrf",
+        "experiment.ablation",
+        "rerank.cross",
+        "search.dense",
+        "delivery.accept",
+        "experiment.split",
+        "answer.ground",
+        "legacy.redirect"
+      ],
+      "hybrid": [
+        "search.rrf",
+        "experiment.ablation",
+        "legacy.redirect",
+        "index.fresh",
+        "rerank.cross",
+        "search.dense",
+        "delivery.accept",
+        "ingest.formats"
+      ],
+      "rerank": [
+        "search.rrf",
+        "rerank.cross",
+        "search.dense",
+        "experiment.ablation",
+        "legacy.redirect",
+        "delivery.accept",
+        "index.fresh",
+        "ingest.formats"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.27637500897981226,
+      "dense": 3.210875001968816,
+      "hybrid": 3.4950830158777535,
+      "rerank": 44.85949901572894
+    },
+    "rerank_scores": {
+      "search.rrf": 0.5285214781761169,
+      "rerank.cross": -5.951974391937256,
+      "search.dense": -6.264909744262695,
+      "experiment.ablation": -6.924686908721924,
+      "legacy.redirect": -7.098322868347168,
+      "delivery.accept": -7.154815196990967,
+      "index.fresh": -7.841247081756592,
+      "ingest.formats": -8.94558048248291
+    },
+    "top_score": 0.5285214781761169
+  },
+  {
+    "id": "q004",
+    "split": "dev",
+    "question": "正确材料根本没进入候选，重新排个序能救回来吗？",
+    "relevant_ids": [
+      "rerank.limit"
+    ],
+    "reference_answer": "不能，先检查候选召回率。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "rerank.limit",
+        "rerank.cross",
+        "legacy.redirect",
+        "ingest.formats",
+        "eval.rank",
+        "eval.answer",
+        "index.version",
+        "rerank.budget"
+      ],
+      "dense": [
+        "rerank.limit",
+        "answer.ground",
+        "ops.timeout",
+        "eval.answer",
+        "rerank.budget",
+        "experiment.ablation",
+        "ops.empty",
+        "ingest.duplicate"
+      ],
+      "hybrid": [
+        "rerank.limit",
+        "eval.answer",
+        "rerank.budget",
+        "answer.ground",
+        "rerank.cross",
+        "legacy.redirect",
+        "ops.timeout",
+        "ingest.formats"
+      ],
+      "rerank": [
+        "rerank.limit",
+        "legacy.redirect",
+        "rerank.budget",
+        "rerank.cross",
+        "ingest.formats",
+        "ops.timeout",
+        "eval.answer",
+        "answer.ground"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.298415994620882,
+      "dense": 3.178332990501076,
+      "hybrid": 3.483248990960419,
+      "rerank": 43.437706990516745
+    },
+    "rerank_scores": {
+      "rerank.limit": 6.745237350463867,
+      "legacy.redirect": -4.062385082244873,
+      "rerank.budget": -5.638088703155518,
+      "rerank.cross": -6.188110828399658,
+      "ingest.formats": -6.741587162017822,
+      "ops.timeout": -6.762598037719727,
+      "eval.answer": -6.879333019256592,
+      "answer.ground": -7.237063407897949
+    },
+    "top_score": 6.745237350463867
+  },
+  {
+    "id": "q005",
+    "split": "dev",
+    "question": "回答应该如何表明来自哪段资料？",
+    "relevant_ids": [
+      "answer.ground"
+    ],
+    "reference_answer": "关键结论标注支持它的片段ID。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "answer.attack",
+        "answer.ground",
+        "eval.answer",
+        "access.role",
+        "delivery.local",
+        "ops.empty",
+        "eval.rank",
+        "rerank.limit"
+      ],
+      "dense": [
+        "answer.ground",
+        "answer.attack",
+        "eval.answer",
+        "experiment.label",
+        "eval.recall",
+        "search.dense",
+        "delivery.accept",
+        "delivery.local"
+      ],
+      "hybrid": [
+        "answer.ground",
+        "answer.attack",
+        "eval.answer",
+        "delivery.local",
+        "access.role",
+        "experiment.label",
+        "eval.recall",
+        "ops.empty"
+      ],
+      "rerank": [
+        "answer.ground",
+        "answer.attack",
+        "experiment.label",
+        "eval.recall",
+        "eval.answer",
+        "ops.empty",
+        "access.role",
+        "delivery.local"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.22120799985714257,
+      "dense": 3.115875006187707,
+      "hybrid": 3.345249002450146,
+      "rerank": 38.69358201336581
+    },
+    "rerank_scores": {
+      "answer.ground": 2.368381977081299,
+      "answer.attack": -1.9010858535766602,
+      "experiment.label": -3.7463533878326416,
+      "eval.recall": -4.276493549346924,
+      "eval.answer": -5.016672611236572,
+      "ops.empty": -5.482840061187744,
+      "access.role": -6.909377574920654,
+      "delivery.local": -7.043288707733154
+    },
+    "top_score": 2.368381977081299
+  },
+  {
+    "id": "q006",
+    "split": "dev",
+    "question": "测评问题拿来调参数可以吗？",
+    "relevant_ids": [
+      "experiment.split"
+    ],
+    "reference_answer": "只能用开发集调参，保留测试集不参与调参。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "access.role",
+        "legacy.chunk",
+        "eval.rank",
+        "cache.key",
+        "experiment.label",
+        "delivery.accept",
+        "experiment.ablation",
+        "eval.recall"
+      ],
+      "dense": [
+        "experiment.split",
+        "rerank.budget",
+        "delivery.owner",
+        "eval.rank",
+        "eval.recall",
+        "eval.answer",
+        "rerank.cross",
+        "search.dense"
+      ],
+      "hybrid": [
+        "eval.rank",
+        "eval.recall",
+        "access.role",
+        "experiment.split",
+        "legacy.chunk",
+        "rerank.budget",
+        "delivery.owner",
+        "cache.key"
+      ],
+      "rerank": [
+        "experiment.split",
+        "eval.recall",
+        "cache.key",
+        "delivery.owner",
+        "eval.rank",
+        "rerank.budget",
+        "legacy.chunk",
+        "access.role"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.20979199325665832,
+      "dense": 3.087457997025922,
+      "hybrid": 3.3052079961635172,
+      "rerank": 35.43562498816755
+    },
+    "rerank_scores": {
+      "experiment.split": 1.730986475944519,
+      "eval.recall": -3.7822749614715576,
+      "cache.key": -3.89292311668396,
+      "delivery.owner": -4.70953893661499,
+      "eval.rank": -5.297008991241455,
+      "rerank.budget": -5.392409801483154,
+      "legacy.chunk": -5.871622085571289,
+      "access.role": -7.472548961639404
+    },
+    "top_score": 1.730986475944519
+  },
+  {
+    "id": "q007",
+    "split": "dev",
+    "question": "团队负责人电话号码是多少？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "legacy.limit",
+        "search.bm25",
+        "ops.limit",
+        "search.rrf",
+        "answer.attack",
+        "access.token",
+        "access.role",
+        "access.rotate"
+      ],
+      "dense": [
+        "ops.limit",
+        "access.token",
+        "eval.answer",
+        "access.role",
+        "delivery.owner",
+        "ingest.formats",
+        "answer.ground",
+        "search.bm25"
+      ],
+      "hybrid": [
+        "ops.limit",
+        "access.token",
+        "search.bm25",
+        "access.role",
+        "legacy.limit",
+        "eval.answer",
+        "search.rrf",
+        "answer.attack"
+      ],
+      "rerank": [
+        "access.token",
+        "search.bm25",
+        "search.rrf",
+        "access.role",
+        "legacy.limit",
+        "ops.limit",
+        "eval.answer",
+        "answer.attack"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.18487499619368464,
+      "dense": 3.057791996980086,
+      "hybrid": 3.2507919968338683,
+      "rerank": 43.819416998303495
+    },
+    "rerank_scores": {
+      "access.token": -5.335869312286377,
+      "search.bm25": -6.207069396972656,
+      "search.rrf": -7.377880573272705,
+      "access.role": -7.472105503082275,
+      "legacy.limit": -8.268011093139648,
+      "ops.limit": -8.400757789611816,
+      "eval.answer": -8.58777141571045,
+      "answer.attack": -9.298287391662598
+    },
+    "top_score": -5.335869312286377
+  },
+  {
+    "id": "q008",
+    "split": "dev",
+    "question": "明年的订阅价格会涨多少？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ingest.formats",
+        "eval.rank",
+        "eval.recall",
+        "eval.answer",
+        "delivery.owner",
+        "answer.attack",
+        "access.rotate",
+        "index.version"
+      ],
+      "dense": [
+        "delivery.local",
+        "index.fresh",
+        "eval.recall",
+        "rerank.budget",
+        "ops.timeout",
+        "answer.ground",
+        "ingest.formats",
+        "experiment.label"
+      ],
+      "hybrid": [
+        "eval.recall",
+        "ingest.formats",
+        "delivery.local",
+        "eval.rank",
+        "index.fresh",
+        "eval.answer",
+        "rerank.budget",
+        "delivery.owner"
+      ],
+      "rerank": [
+        "rerank.budget",
+        "ingest.formats",
+        "eval.recall",
+        "eval.rank",
+        "delivery.local",
+        "index.fresh",
+        "eval.answer",
+        "delivery.owner"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.21600000036414713,
+      "dense": 3.110791993094608,
+      "hybrid": 3.3340419904561713,
+      "rerank": 35.144708992447704
+    },
+    "rerank_scores": {
+      "rerank.budget": -6.295663356781006,
+      "ingest.formats": -8.621258735656738,
+      "eval.recall": -9.606297492980957,
+      "eval.rank": -9.673237800598145,
+      "delivery.local": -9.735867500305176,
+      "index.fresh": -9.738699913024902,
+      "eval.answer": -9.974837303161621,
+      "delivery.owner": -10.111577987670898
+    },
+    "top_score": -6.295663356781006
+  },
+  {
+    "id": "q009",
+    "split": "test",
+    "question": "SEARCH_429_LIMIT 需要重新登录吗？",
+    "relevant_ids": [
+      "ops.limit"
+    ],
+    "reference_answer": "不需要重新登录，遵循Retry-After并指数退避，配额60次每分钟。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ops.limit",
+        "ops.empty",
+        "ops.timeout",
+        "ingest.chunk",
+        "access.token",
+        "legacy.redirect",
+        "index.version",
+        "cache.log"
+      ],
+      "dense": [
+        "ops.limit",
+        "ingest.formats",
+        "legacy.redirect",
+        "ops.empty",
+        "ingest.duplicate",
+        "ops.timeout",
+        "index.version",
+        "access.token"
+      ],
+      "hybrid": [
+        "ops.limit",
+        "ops.empty",
+        "legacy.redirect",
+        "ops.timeout",
+        "access.token",
+        "index.version",
+        "ingest.formats",
+        "ingest.chunk"
+      ],
+      "rerank": [
+        "ops.limit",
+        "ops.empty",
+        "index.version",
+        "ops.timeout",
+        "access.token",
+        "ingest.formats",
+        "legacy.redirect",
+        "ingest.chunk"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.21454200032167137,
+      "dense": 3.0560000013792887,
+      "hybrid": 3.276999996160157,
+      "rerank": 46.90575000131503
+    },
+    "rerank_scores": {
+      "ops.limit": 6.240687370300293,
+      "ops.empty": -3.345961809158325,
+      "index.version": -3.528839349746704,
+      "ops.timeout": -3.920180082321167,
+      "access.token": -6.310741901397705,
+      "ingest.formats": -6.635626316070557,
+      "legacy.redirect": -6.651986598968506,
+      "ingest.chunk": -6.832859516143799
+    },
+    "top_score": 6.240687370300293
+  },
+  {
+    "id": "q010",
+    "split": "test",
+    "question": "SEARCH_504_TIMEOUT 的排查顺序是什么？",
+    "relevant_ids": [
+      "ops.timeout"
+    ],
+    "reference_answer": "检查向量查询与重排耗时，缩小候选数或使用已校验缓存。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ops.timeout",
+        "ops.limit",
+        "ops.empty",
+        "rerank.limit",
+        "legacy.redirect",
+        "answer.attack",
+        "search.bm25",
+        "search.rrf"
+      ],
+      "dense": [
+        "ops.timeout",
+        "eval.rank",
+        "search.rrf",
+        "ops.empty",
+        "rerank.limit",
+        "experiment.ablation",
+        "cache.log",
+        "eval.recall"
+      ],
+      "hybrid": [
+        "ops.timeout",
+        "ops.empty",
+        "rerank.limit",
+        "search.rrf",
+        "eval.rank",
+        "ops.limit",
+        "legacy.redirect",
+        "answer.attack"
+      ],
+      "rerank": [
+        "ops.timeout",
+        "ops.limit",
+        "rerank.limit",
+        "ops.empty",
+        "eval.rank",
+        "legacy.redirect",
+        "search.rrf",
+        "answer.attack"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.24537499120924622,
+      "dense": 3.109375000349246,
+      "hybrid": 3.361416995176114,
+      "rerank": 41.60250100539997
+    },
+    "rerank_scores": {
+      "ops.timeout": 5.406774997711182,
+      "ops.limit": -2.754969596862793,
+      "rerank.limit": -3.8600385189056396,
+      "ops.empty": -4.618004322052002,
+      "eval.rank": -4.737147331237793,
+      "legacy.redirect": -5.800769329071045,
+      "search.rrf": -6.175229549407959,
+      "answer.attack": -6.841358661651611
+    },
+    "top_score": 5.406774997711182
+  },
+  {
+    "id": "q011",
+    "split": "test",
+    "question": "SEARCH_204_EMPTY 之后能不能搜别人的项目来回答？",
+    "relevant_ids": [
+      "ops.empty"
+    ],
+    "reference_answer": "不能绕过权限，检查入库、项目权限和版本。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ops.empty",
+        "ops.limit",
+        "ops.timeout",
+        "access.role",
+        "eval.rank",
+        "answer.ground",
+        "cache.log",
+        "eval.recall"
+      ],
+      "dense": [
+        "ops.empty",
+        "delivery.local",
+        "answer.ground",
+        "ops.timeout",
+        "eval.answer",
+        "rerank.cross",
+        "experiment.label",
+        "index.fresh"
+      ],
+      "hybrid": [
+        "ops.empty",
+        "ops.timeout",
+        "answer.ground",
+        "delivery.local",
+        "ops.limit",
+        "access.role",
+        "eval.rank",
+        "eval.answer"
+      ],
+      "rerank": [
+        "ops.empty",
+        "ops.limit",
+        "access.role",
+        "answer.ground",
+        "delivery.local",
+        "ops.timeout",
+        "eval.answer",
+        "eval.rank"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2668750094017014,
+      "dense": 3.1561249925289303,
+      "hybrid": 3.430291995755397,
+      "rerank": 37.12745799566619
+    },
+    "rerank_scores": {
+      "ops.empty": 5.173110008239746,
+      "ops.limit": -3.223400831222534,
+      "access.role": -5.075329780578613,
+      "answer.ground": -5.699988842010498,
+      "delivery.local": -5.745182037353516,
+      "ops.timeout": -6.411279678344727,
+      "eval.answer": -6.738589763641357,
+      "eval.rank": -7.4130988121032715
+    },
+    "top_score": 5.173110008239746
+  },
+  {
+    "id": "q012",
+    "split": "test",
+    "question": "接口鉴权时令牌应放在哪里，能用多久？",
+    "relevant_ids": [
+      "access.token"
+    ],
+    "reference_answer": "Authorization头中使用Bearer令牌，有效期2小时。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "access.token",
+        "answer.ground",
+        "ops.limit",
+        "delivery.owner",
+        "answer.attack",
+        "access.rotate",
+        "index.fresh",
+        "index.version"
+      ],
+      "dense": [
+        "access.token",
+        "ops.limit",
+        "access.rotate",
+        "index.fresh",
+        "answer.attack",
+        "answer.ground",
+        "eval.recall",
+        "rerank.cross"
+      ],
+      "hybrid": [
+        "access.token",
+        "ops.limit",
+        "answer.ground",
+        "access.rotate",
+        "answer.attack",
+        "index.fresh",
+        "delivery.owner",
+        "eval.recall"
+      ],
+      "rerank": [
+        "access.token",
+        "access.rotate",
+        "index.fresh",
+        "ops.limit",
+        "eval.recall",
+        "answer.attack",
+        "answer.ground",
+        "delivery.owner"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.23966700246091932,
+      "dense": 3.1180410005617887,
+      "hybrid": 3.363916010130197,
+      "rerank": 47.14329101261683
+    },
+    "rerank_scores": {
+      "access.token": -2.5588772296905518,
+      "access.rotate": -5.323671817779541,
+      "index.fresh": -5.69768762588501,
+      "ops.limit": -6.5078206062316895,
+      "eval.recall": -8.330464363098145,
+      "answer.attack": -8.825301170349121,
+      "answer.ground": -8.91995906829834,
+      "delivery.owner": -10.15770435333252
+    },
+    "top_score": -2.5588772296905518
+  },
+  {
+    "id": "q013",
+    "split": "test",
+    "question": "项目密钥更新后，旧的还能用一段时间吗？",
+    "relevant_ids": [
+      "access.rotate"
+    ],
+    "reference_answer": "新旧密钥重叠24小时，每30天轮换。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "access.rotate",
+        "index.version",
+        "ops.empty",
+        "ingest.duplicate",
+        "access.role",
+        "answer.attack",
+        "delivery.owner",
+        "search.dense"
+      ],
+      "dense": [
+        "access.rotate",
+        "ingest.duplicate",
+        "ops.empty",
+        "access.token",
+        "index.fresh",
+        "index.version",
+        "cache.retain",
+        "answer.ground"
+      ],
+      "hybrid": [
+        "access.rotate",
+        "ingest.duplicate",
+        "ops.empty",
+        "index.version",
+        "access.token",
+        "access.role",
+        "index.fresh",
+        "answer.attack"
+      ],
+      "rerank": [
+        "access.rotate",
+        "ops.empty",
+        "index.version",
+        "index.fresh",
+        "access.token",
+        "access.role",
+        "ingest.duplicate",
+        "answer.attack"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.24708300770726055,
+      "dense": 3.153208992443979,
+      "hybrid": 3.4075420117005706,
+      "rerank": 46.63795900705736
+    },
+    "rerank_scores": {
+      "access.rotate": 2.850285768508911,
+      "ops.empty": -4.481696605682373,
+      "index.version": -4.912962436676025,
+      "index.fresh": -5.862467288970947,
+      "access.token": -6.146787166595459,
+      "access.role": -6.149782657623291,
+      "ingest.duplicate": -6.505282402038574,
+      "answer.attack": -7.341901779174805
+    },
+    "top_score": 2.850285768508911
+  },
+  {
+    "id": "q014",
+    "split": "test",
+    "question": "照片扫描出来的 PDF 上传后搜不到字，怎么办？",
+    "relevant_ids": [
+      "ingest.formats"
+    ],
+    "reference_answer": "扫描PDF先OCR，空文本不直接索引。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ingest.formats",
+        "index.fresh",
+        "legacy.chunk",
+        "access.role",
+        "search.dense",
+        "rerank.limit",
+        "ops.empty",
+        "experiment.ablation"
+      ],
+      "dense": [
+        "index.fresh",
+        "ingest.formats",
+        "answer.ground",
+        "ingest.duplicate",
+        "ops.empty",
+        "index.version",
+        "eval.recall",
+        "delivery.local"
+      ],
+      "hybrid": [
+        "index.fresh",
+        "ingest.formats",
+        "ops.empty",
+        "answer.ground",
+        "legacy.chunk",
+        "access.role",
+        "ingest.duplicate",
+        "search.dense"
+      ],
+      "rerank": [
+        "index.fresh",
+        "ingest.formats",
+        "answer.ground",
+        "ingest.duplicate",
+        "search.dense",
+        "ops.empty",
+        "legacy.chunk",
+        "access.role"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2542080037528649,
+      "dense": 3.1317499961005524,
+      "hybrid": 3.392498998437077,
+      "rerank": 41.48016600811388
+    },
+    "rerank_scores": {
+      "index.fresh": -3.066230297088623,
+      "ingest.formats": -3.0768721103668213,
+      "answer.ground": -3.6416146755218506,
+      "ingest.duplicate": -5.735017776489258,
+      "search.dense": -6.275458812713623,
+      "ops.empty": -6.279087543487549,
+      "legacy.chunk": -6.883054733276367,
+      "access.role": -7.7890944480896
+    },
+    "top_score": -3.066230297088623
+  },
+  {
+    "id": "q015",
+    "split": "test",
+    "question": "同一份文件反复上传怎样避免重复内容？",
+    "relevant_ids": [
+      "ingest.duplicate"
+    ],
+    "reference_answer": "以document_id与内容SHA-256判断，内容相同跳过。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ingest.duplicate",
+        "search.rrf",
+        "index.fresh",
+        "legacy.redirect",
+        "experiment.split",
+        "access.role",
+        "cache.key",
+        "answer.attack"
+      ],
+      "dense": [
+        "index.fresh",
+        "ingest.duplicate",
+        "answer.ground",
+        "delivery.accept",
+        "ingest.formats",
+        "index.version",
+        "answer.conflict",
+        "answer.attack"
+      ],
+      "hybrid": [
+        "ingest.duplicate",
+        "index.fresh",
+        "answer.attack",
+        "search.rrf",
+        "answer.ground",
+        "delivery.accept",
+        "legacy.redirect",
+        "experiment.split"
+      ],
+      "rerank": [
+        "ingest.duplicate",
+        "index.fresh",
+        "search.rrf",
+        "answer.ground",
+        "answer.attack",
+        "experiment.split",
+        "legacy.redirect",
+        "delivery.accept"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.20774999575223774,
+      "dense": 3.1244169949786738,
+      "hybrid": 3.33874998614192,
+      "rerank": 38.20799998356961
+    },
+    "rerank_scores": {
+      "ingest.duplicate": -1.6632673740386963,
+      "index.fresh": -3.6419804096221924,
+      "search.rrf": -4.347606182098389,
+      "answer.ground": -5.004541873931885,
+      "answer.attack": -5.807060241699219,
+      "experiment.split": -6.420016765594482,
+      "legacy.redirect": -6.784586429595947,
+      "delivery.accept": -6.798820972442627
+    },
+    "top_score": -1.6632673740386963
+  },
+  {
+    "id": "q016",
+    "split": "test",
+    "question": "检索器怎样找到用词不同但意思接近的内容？",
+    "relevant_ids": [
+      "search.dense"
+    ],
+    "reference_answer": "通过Embedding向量相似度，注意罕见标识符可能混淆。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "search.bm25",
+        "search.rrf",
+        "cache.key",
+        "eval.recall",
+        "search.dense",
+        "ingest.duplicate",
+        "answer.attack",
+        "experiment.label"
+      ],
+      "dense": [
+        "search.dense",
+        "search.bm25",
+        "index.fresh",
+        "legacy.redirect",
+        "rerank.cross",
+        "answer.ground",
+        "ingest.duplicate",
+        "delivery.accept"
+      ],
+      "hybrid": [
+        "search.bm25",
+        "search.dense",
+        "ingest.duplicate",
+        "search.rrf",
+        "cache.key",
+        "index.fresh",
+        "eval.recall",
+        "legacy.redirect"
+      ],
+      "rerank": [
+        "search.bm25",
+        "search.dense",
+        "ingest.duplicate",
+        "cache.key",
+        "index.fresh",
+        "search.rrf",
+        "eval.recall",
+        "legacy.redirect"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.22504100343212485,
+      "dense": 3.1127080001169816,
+      "hybrid": 3.344790995470248,
+      "rerank": 41.77999999956228
+    },
+    "rerank_scores": {
+      "search.bm25": 0.15265272557735443,
+      "search.dense": -1.5094995498657227,
+      "ingest.duplicate": -2.719904661178589,
+      "cache.key": -4.096280574798584,
+      "index.fresh": -4.662596702575684,
+      "search.rrf": -4.895819187164307,
+      "eval.recall": -5.290667533874512,
+      "legacy.redirect": -6.579905033111572
+    },
+    "top_score": 0.15265272557735443
+  },
+  {
+    "id": "q017",
+    "split": "test",
+    "question": "为什么搜索错误编号时保留关键词匹配这一路？",
+    "relevant_ids": [
+      "search.bm25"
+    ],
+    "reference_answer": "BM25适合错误码等精确词项，语义改写可能不足。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "delivery.accept",
+        "cache.retain",
+        "eval.answer",
+        "search.bm25",
+        "experiment.split",
+        "delivery.local",
+        "search.rrf",
+        "delivery.owner"
+      ],
+      "dense": [
+        "search.bm25",
+        "answer.ground",
+        "eval.answer",
+        "rerank.cross",
+        "cache.key",
+        "experiment.label",
+        "index.fresh",
+        "delivery.accept"
+      ],
+      "hybrid": [
+        "search.bm25",
+        "eval.answer",
+        "delivery.accept",
+        "answer.ground",
+        "cache.retain",
+        "rerank.cross",
+        "cache.key",
+        "experiment.split"
+      ],
+      "rerank": [
+        "search.bm25",
+        "eval.answer",
+        "rerank.cross",
+        "cache.key",
+        "answer.ground",
+        "experiment.split",
+        "delivery.accept",
+        "cache.retain"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.23262499598786235,
+      "dense": 3.124458991806023,
+      "hybrid": 3.365208991453983,
+      "rerank": 39.94108398910612
+    },
+    "rerank_scores": {
+      "search.bm25": -2.1858413219451904,
+      "eval.answer": -4.079955577850342,
+      "rerank.cross": -5.956491947174072,
+      "cache.key": -6.40487003326416,
+      "answer.ground": -6.462738513946533,
+      "experiment.split": -6.857936859130859,
+      "delivery.accept": -6.998429775238037,
+      "cache.retain": -9.050868034362793
+    },
+    "top_score": -2.1858413219451904
+  },
+  {
+    "id": "q018",
+    "split": "test",
+    "question": "RRF 中一条资料在两路都出现会发生什么？",
+    "relevant_ids": [
+      "search.rrf"
+    ],
+    "reference_answer": "按两路倒数排名累加贡献，常数60。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "answer.attack",
+        "access.token",
+        "eval.recall",
+        "search.rrf",
+        "rerank.limit",
+        "index.fresh",
+        "access.role",
+        "delivery.local"
+      ],
+      "dense": [
+        "search.rrf",
+        "search.dense",
+        "answer.ground",
+        "index.fresh",
+        "experiment.ablation",
+        "legacy.limit",
+        "answer.attack",
+        "experiment.label"
+      ],
+      "hybrid": [
+        "search.rrf",
+        "answer.attack",
+        "index.fresh",
+        "access.token",
+        "search.dense",
+        "answer.ground",
+        "eval.recall",
+        "experiment.ablation"
+      ],
+      "rerank": [
+        "search.rrf",
+        "index.fresh",
+        "answer.attack",
+        "search.dense",
+        "answer.ground",
+        "eval.recall",
+        "experiment.ablation",
+        "access.token"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.235624989727512,
+      "dense": 3.128416996332817,
+      "hybrid": 3.3706669928506017,
+      "rerank": 47.22458298783749
+    },
+    "rerank_scores": {
+      "search.rrf": -2.667717933654785,
+      "index.fresh": -5.560777187347412,
+      "answer.attack": -5.956010818481445,
+      "search.dense": -6.314431667327881,
+      "answer.ground": -6.38643741607666,
+      "eval.recall": -7.26567268371582,
+      "experiment.ablation": -7.699079990386963,
+      "access.token": -7.890708923339844
+    },
+    "top_score": -2.667717933654785
+  },
+  {
+    "id": "q019",
+    "split": "test",
+    "question": "Bi-Encoder 和 Cross-Encoder 怎么分工？",
+    "relevant_ids": [
+      "search.dense",
+      "rerank.cross"
+    ],
+    "reference_answer": "前者分别编码并召回，后者问题片段成对打分，仅重排候选。",
+    "type": "多证据",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "rerank.cross",
+        "delivery.owner",
+        "search.dense",
+        "ingest.chunk",
+        "search.bm25",
+        "experiment.ablation",
+        "experiment.split",
+        "cache.log"
+      ],
+      "dense": [
+        "rerank.cross",
+        "experiment.ablation",
+        "delivery.owner",
+        "search.rrf",
+        "experiment.label",
+        "ingest.chunk",
+        "search.bm25",
+        "eval.rank"
+      ],
+      "hybrid": [
+        "rerank.cross",
+        "delivery.owner",
+        "experiment.ablation",
+        "ingest.chunk",
+        "search.bm25",
+        "search.dense",
+        "search.rrf",
+        "experiment.label"
+      ],
+      "rerank": [
+        "rerank.cross",
+        "search.rrf",
+        "delivery.owner",
+        "ingest.chunk",
+        "experiment.ablation",
+        "search.dense",
+        "experiment.label",
+        "search.bm25"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.19583399989642203,
+      "dense": 3.1106670066947117,
+      "hybrid": 3.3127509959740564,
+      "rerank": 42.91641699091997
+    },
+    "rerank_scores": {
+      "rerank.cross": 4.718847274780273,
+      "search.rrf": -0.6583291888237,
+      "delivery.owner": -2.4471800327301025,
+      "ingest.chunk": -2.494489908218384,
+      "experiment.ablation": -3.22363543510437,
+      "search.dense": -3.2534940242767334,
+      "experiment.label": -4.286559581756592,
+      "search.bm25": -5.5534138679504395
+    },
+    "top_score": 4.718847274780273
+  },
+  {
+    "id": "q020",
+    "split": "test",
+    "question": "多拉一倍材料再做精排，效果一定好吗？",
+    "relevant_ids": [
+      "rerank.budget"
+    ],
+    "reference_answer": "不保证，记录质量与延迟权衡。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "experiment.ablation",
+        "eval.rank",
+        "rerank.cross",
+        "access.role",
+        "index.delete",
+        "ingest.duplicate",
+        "ops.timeout",
+        "search.rrf"
+      ],
+      "dense": [
+        "experiment.ablation",
+        "rerank.budget",
+        "eval.rank",
+        "delivery.accept",
+        "answer.conflict",
+        "ops.timeout",
+        "search.rrf",
+        "answer.ground"
+      ],
+      "hybrid": [
+        "experiment.ablation",
+        "eval.rank",
+        "ops.timeout",
+        "search.rrf",
+        "rerank.budget",
+        "rerank.cross",
+        "access.role",
+        "delivery.accept"
+      ],
+      "rerank": [
+        "experiment.ablation",
+        "rerank.budget",
+        "rerank.cross",
+        "delivery.accept",
+        "access.role",
+        "ops.timeout",
+        "search.rrf",
+        "eval.rank"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2349580026930198,
+      "dense": 3.1152080046012998,
+      "hybrid": 3.356666013132781,
+      "rerank": 41.403874012758024
+    },
+    "rerank_scores": {
+      "experiment.ablation": -4.939236640930176,
+      "rerank.budget": -5.007491588592529,
+      "rerank.cross": -6.4390997886657715,
+      "delivery.accept": -7.652245044708252,
+      "access.role": -7.726521015167236,
+      "ops.timeout": -8.023482322692871,
+      "search.rrf": -8.184253692626953,
+      "eval.rank": -8.626811981201172
+    },
+    "top_score": -4.939236640930176
+  },
+  {
+    "id": "q021",
+    "split": "test",
+    "question": "找对第一条资料就能证明多个依据全找全了吗？",
+    "relevant_ids": [
+      "eval.recall",
+      "eval.rank"
+    ],
+    "reference_answer": "不能，MRR看首条，Recall计算全部相关片段覆盖。",
+    "type": "多证据",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "answer.ground",
+        "eval.rank",
+        "rerank.limit",
+        "rerank.cross",
+        "answer.attack",
+        "eval.recall",
+        "index.delete",
+        "search.rrf"
+      ],
+      "dense": [
+        "answer.ground",
+        "delivery.accept",
+        "answer.attack",
+        "index.fresh",
+        "eval.answer",
+        "eval.recall",
+        "experiment.label",
+        "delivery.local"
+      ],
+      "hybrid": [
+        "answer.ground",
+        "answer.attack",
+        "eval.recall",
+        "delivery.accept",
+        "eval.rank",
+        "rerank.limit",
+        "index.fresh",
+        "rerank.cross"
+      ],
+      "rerank": [
+        "eval.rank",
+        "eval.recall",
+        "delivery.accept",
+        "answer.ground",
+        "index.fresh",
+        "rerank.cross",
+        "rerank.limit",
+        "answer.attack"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.26583300495985895,
+      "dense": 3.105209005298093,
+      "hybrid": 3.3784170082071796,
+      "rerank": 41.398417015443556
+    },
+    "rerank_scores": {
+      "eval.rank": -2.1273534297943115,
+      "eval.recall": -3.4666616916656494,
+      "delivery.accept": -5.016263484954834,
+      "answer.ground": -5.113318920135498,
+      "index.fresh": -5.588951587677002,
+      "rerank.cross": -5.917893886566162,
+      "rerank.limit": -6.256340026855469,
+      "answer.attack": -6.647159099578857
+    },
+    "top_score": -2.1273534297943115
+  },
+  {
+    "id": "q022",
+    "split": "test",
+    "question": "检索排名很好是不是就能保证答案可信？",
+    "relevant_ids": [
+      "eval.rank",
+      "eval.answer"
+    ],
+    "reference_answer": "不能，还要检查事实正确、覆盖、引用支持与拒答。",
+    "type": "多证据",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "eval.rank",
+        "search.rrf",
+        "rerank.budget",
+        "delivery.accept",
+        "answer.conflict",
+        "eval.answer",
+        "experiment.label",
+        "legacy.redirect"
+      ],
+      "dense": [
+        "eval.rank",
+        "eval.answer",
+        "answer.ground",
+        "index.fresh",
+        "delivery.accept",
+        "search.rrf",
+        "experiment.ablation",
+        "delivery.local"
+      ],
+      "hybrid": [
+        "eval.rank",
+        "eval.answer",
+        "search.rrf",
+        "delivery.accept",
+        "answer.ground",
+        "rerank.budget",
+        "index.fresh",
+        "answer.conflict"
+      ],
+      "rerank": [
+        "eval.rank",
+        "answer.ground",
+        "eval.answer",
+        "delivery.accept",
+        "rerank.budget",
+        "index.fresh",
+        "answer.conflict",
+        "search.rrf"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2287090028403327,
+      "dense": 3.1197499920381233,
+      "hybrid": 3.3559169969521463,
+      "rerank": 38.59158400155138
+    },
+    "rerank_scores": {
+      "eval.rank": -2.5551061630249023,
+      "answer.ground": -4.1037278175354,
+      "eval.answer": -4.450754642486572,
+      "delivery.accept": -4.463739395141602,
+      "rerank.budget": -4.877835750579834,
+      "index.fresh": -6.276081562042236,
+      "answer.conflict": -6.655886173248291,
+      "search.rrf": -7.0569891929626465
+    },
+    "top_score": -2.5551061630249023
+  },
+  {
+    "id": "q023",
+    "split": "test",
+    "question": "一份资料让模型忽略规则并交出令牌，要照办吗？",
+    "relevant_ids": [
+      "answer.attack"
+    ],
+    "reference_answer": "不能执行资料内指令，应区分任务指令与资料。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "answer.attack",
+        "access.token",
+        "index.version",
+        "ops.limit",
+        "experiment.ablation",
+        "delivery.local",
+        "rerank.limit",
+        "cache.log"
+      ],
+      "dense": [
+        "answer.attack",
+        "answer.ground",
+        "access.token",
+        "delivery.local",
+        "index.version",
+        "delivery.accept",
+        "ops.limit",
+        "answer.conflict"
+      ],
+      "hybrid": [
+        "answer.attack",
+        "access.token",
+        "index.version",
+        "delivery.local",
+        "ops.limit",
+        "answer.ground",
+        "experiment.ablation",
+        "delivery.accept"
+      ],
+      "rerank": [
+        "answer.attack",
+        "access.token",
+        "answer.ground",
+        "index.version",
+        "delivery.accept",
+        "delivery.local",
+        "ops.limit",
+        "experiment.ablation"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.22408401127904654,
+      "dense": 3.088625002419576,
+      "hybrid": 3.3190430112881586,
+      "rerank": 48.61483500280883
+    },
+    "rerank_scores": {
+      "answer.attack": -0.7602911591529846,
+      "access.token": -4.252590656280518,
+      "answer.ground": -5.7736921310424805,
+      "index.version": -7.007605075836182,
+      "delivery.accept": -7.1470794677734375,
+      "delivery.local": -7.171488285064697,
+      "ops.limit": -7.327558994293213,
+      "experiment.ablation": -8.943145751953125
+    },
+    "top_score": -0.7602911591529846
+  },
+  {
+    "id": "q024",
+    "split": "test",
+    "question": "资料里的旧规定和新规定不一致，该怎么办？",
+    "relevant_ids": [
+      "answer.conflict"
+    ],
+    "reference_answer": "采用当前生效版本，无法确认则指出冲突。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "answer.attack",
+        "index.version",
+        "answer.ground",
+        "experiment.ablation",
+        "answer.conflict",
+        "legacy.chunk",
+        "ingest.formats",
+        "index.delete"
+      ],
+      "dense": [
+        "answer.ground",
+        "answer.attack",
+        "index.version",
+        "ingest.duplicate",
+        "delivery.accept",
+        "answer.conflict",
+        "search.dense",
+        "eval.answer"
+      ],
+      "hybrid": [
+        "answer.attack",
+        "answer.ground",
+        "index.version",
+        "answer.conflict",
+        "experiment.ablation",
+        "ingest.duplicate",
+        "delivery.accept",
+        "legacy.chunk"
+      ],
+      "rerank": [
+        "answer.conflict",
+        "answer.attack",
+        "answer.ground",
+        "ingest.duplicate",
+        "legacy.chunk",
+        "delivery.accept",
+        "index.version",
+        "experiment.ablation"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.23770799452904612,
+      "dense": 3.1459589954465628,
+      "hybrid": 3.3909579942701384,
+      "rerank": 36.830665994784795
+    },
+    "rerank_scores": {
+      "answer.conflict": -1.3026641607284546,
+      "answer.attack": -3.1569719314575195,
+      "answer.ground": -3.864288091659546,
+      "ingest.duplicate": -4.049228191375732,
+      "legacy.chunk": -5.122798919677734,
+      "delivery.accept": -5.457439422607422,
+      "index.version": -5.622774124145508,
+      "experiment.ablation": -6.907301425933838
+    },
+    "top_score": -1.3026641607284546
+  },
+  {
+    "id": "q025",
+    "split": "test",
+    "question": "当前一篇上传文档最多多少兆？",
+    "relevant_ids": [
+      "ingest.formats"
+    ],
+    "reference_answer": "20MB。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "index.fresh",
+        "access.role",
+        "ops.empty",
+        "legacy.limit",
+        "experiment.label",
+        "access.token",
+        "answer.conflict",
+        "index.version"
+      ],
+      "dense": [
+        "index.fresh",
+        "answer.ground",
+        "cache.retain",
+        "index.delete",
+        "ingest.formats",
+        "delivery.local",
+        "ops.limit",
+        "ops.timeout"
+      ],
+      "hybrid": [
+        "index.fresh",
+        "access.role",
+        "answer.ground",
+        "cache.retain",
+        "ops.empty",
+        "index.delete",
+        "legacy.limit",
+        "experiment.label"
+      ],
+      "rerank": [
+        "index.fresh",
+        "legacy.limit",
+        "experiment.label",
+        "ops.empty",
+        "cache.retain",
+        "answer.ground",
+        "index.delete",
+        "access.role"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.1965830015251413,
+      "dense": 3.111084006377496,
+      "hybrid": 3.314709014375694,
+      "rerank": 38.12429201207124
+    },
+    "rerank_scores": {
+      "index.fresh": -5.300146579742432,
+      "legacy.limit": -6.264092922210693,
+      "experiment.label": -6.950846195220947,
+      "ops.empty": -6.997065544128418,
+      "cache.retain": -7.603373050689697,
+      "answer.ground": -8.2329740524292,
+      "index.delete": -8.288796424865723,
+      "access.role": -9.087044715881348
+    },
+    "top_score": -5.300146579742432
+  },
+  {
+    "id": "q026",
+    "split": "test",
+    "question": "当前每分钟能问30次还是60次？",
+    "relevant_ids": [
+      "ops.limit"
+    ],
+    "reference_answer": "当前60次每分钟，30次是历史废弃规则。",
+    "type": "版本干扰",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "legacy.limit",
+        "ops.limit",
+        "access.rotate",
+        "answer.conflict",
+        "ops.empty",
+        "legacy.chunk",
+        "search.rrf",
+        "ingest.chunk"
+      ],
+      "dense": [
+        "ops.limit",
+        "legacy.limit",
+        "ops.timeout",
+        "eval.answer",
+        "eval.recall",
+        "rerank.cross",
+        "search.dense",
+        "answer.ground"
+      ],
+      "hybrid": [
+        "legacy.limit",
+        "ops.limit",
+        "access.rotate",
+        "ops.timeout",
+        "answer.conflict",
+        "eval.answer",
+        "eval.recall",
+        "ops.empty"
+      ],
+      "rerank": [
+        "legacy.limit",
+        "ops.limit",
+        "access.rotate",
+        "ops.timeout",
+        "eval.answer",
+        "eval.recall",
+        "answer.conflict",
+        "ops.empty"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.20995800150558352,
+      "dense": 3.0839160026516765,
+      "hybrid": 3.301331991679035,
+      "rerank": 35.310414983541705
+    },
+    "rerank_scores": {
+      "legacy.limit": 6.934925556182861,
+      "ops.limit": 0.13766083121299744,
+      "access.rotate": -6.354578495025635,
+      "ops.timeout": -6.586864948272705,
+      "eval.answer": -6.7472147941589355,
+      "eval.recall": -7.215851306915283,
+      "answer.conflict": -7.9824137687683105,
+      "ops.empty": -8.220688819885254
+    },
+    "top_score": 6.934925556182861
+  },
+  {
+    "id": "q027",
+    "split": "test",
+    "question": "现在切块用200字不重叠，还是400字并重叠？",
+    "relevant_ids": [
+      "ingest.chunk"
+    ],
+    "reference_answer": "当前目标400字，重叠60字，200字无重叠已废弃。",
+    "type": "版本干扰",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "legacy.chunk",
+        "ingest.chunk",
+        "index.delete",
+        "access.rotate",
+        "cache.log",
+        "answer.attack",
+        "answer.conflict",
+        "legacy.redirect"
+      ],
+      "dense": [
+        "legacy.chunk",
+        "ingest.chunk",
+        "ingest.duplicate",
+        "rerank.cross",
+        "experiment.ablation",
+        "answer.conflict",
+        "rerank.budget",
+        "delivery.local"
+      ],
+      "hybrid": [
+        "legacy.chunk",
+        "ingest.chunk",
+        "answer.conflict",
+        "index.delete",
+        "ingest.duplicate",
+        "access.rotate",
+        "rerank.cross",
+        "cache.log"
+      ],
+      "rerank": [
+        "legacy.chunk",
+        "ingest.chunk",
+        "cache.log",
+        "rerank.cross",
+        "answer.conflict",
+        "index.delete",
+        "access.rotate",
+        "ingest.duplicate"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.22737501421943307,
+      "dense": 3.0885419982951134,
+      "hybrid": 3.322709002532065,
+      "rerank": 43.10208400420379
+    },
+    "rerank_scores": {
+      "legacy.chunk": 8.02441692352295,
+      "ingest.chunk": -1.7565159797668457,
+      "cache.log": -7.3878397941589355,
+      "rerank.cross": -7.500004291534424,
+      "answer.conflict": -7.864889144897461,
+      "index.delete": -7.9844536781311035,
+      "access.rotate": -8.330368995666504,
+      "ingest.duplicate": -8.357850074768066
+    },
+    "top_score": 8.02441692352295
+  },
+  {
+    "id": "q028",
+    "split": "test",
+    "question": "有同事权限被取消后，以前的搜索缓存还可用吗？",
+    "relevant_ids": [
+      "cache.key"
+    ],
+    "reference_answer": "权限撤销立即失效，缓存键包含权限版本。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "ops.empty",
+        "cache.key",
+        "access.rotate",
+        "delivery.local",
+        "access.role",
+        "cache.retain",
+        "ops.timeout",
+        "search.dense"
+      ],
+      "dense": [
+        "cache.key",
+        "index.delete",
+        "index.fresh",
+        "ops.empty",
+        "answer.ground",
+        "ops.timeout",
+        "cache.retain",
+        "ops.limit"
+      ],
+      "hybrid": [
+        "cache.key",
+        "ops.empty",
+        "cache.retain",
+        "ops.timeout",
+        "index.delete",
+        "access.rotate",
+        "index.fresh",
+        "delivery.local"
+      ],
+      "rerank": [
+        "cache.key",
+        "ops.empty",
+        "index.delete",
+        "ops.timeout",
+        "cache.retain",
+        "access.rotate",
+        "delivery.local",
+        "index.fresh"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2415000053588301,
+      "dense": 3.1096250022528693,
+      "hybrid": 3.3575410052435473,
+      "rerank": 38.713874004315585
+    },
+    "rerank_scores": {
+      "cache.key": -1.0186083316802979,
+      "ops.empty": -2.0115854740142822,
+      "index.delete": -6.988086223602295,
+      "ops.timeout": -7.3173136711120605,
+      "cache.retain": -7.364936351776123,
+      "access.rotate": -8.301310539245605,
+      "delivery.local": -8.740464210510254,
+      "index.fresh": -8.873344421386719
+    },
+    "top_score": -1.0186083316802979
+  },
+  {
+    "id": "q029",
+    "split": "test",
+    "question": "查一次请求为什么慢，应该保留什么记录？",
+    "relevant_ids": [
+      "cache.log"
+    ],
+    "reference_answer": "记录request_id、各阶段耗时、候选ID、模型与配置摘要，不默认记录正文。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "cache.retain",
+        "cache.log",
+        "access.token",
+        "experiment.ablation",
+        "access.rotate",
+        "ops.timeout",
+        "delivery.accept",
+        "legacy.redirect"
+      ],
+      "dense": [
+        "ops.timeout",
+        "cache.log",
+        "index.fresh",
+        "delivery.accept",
+        "cache.retain",
+        "answer.ground",
+        "answer.attack",
+        "index.version"
+      ],
+      "hybrid": [
+        "cache.log",
+        "cache.retain",
+        "ops.timeout",
+        "delivery.accept",
+        "access.token",
+        "index.fresh",
+        "experiment.ablation",
+        "access.rotate"
+      ],
+      "rerank": [
+        "cache.log",
+        "ops.timeout",
+        "delivery.accept",
+        "cache.retain",
+        "experiment.ablation",
+        "index.fresh",
+        "access.token",
+        "access.rotate"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.20474998746067286,
+      "dense": 3.10212500335183,
+      "hybrid": 3.314374989713542,
+      "rerank": 45.56349998165388
+    },
+    "rerank_scores": {
+      "cache.log": 0.770851194858551,
+      "ops.timeout": -3.347257375717163,
+      "delivery.accept": -4.997425556182861,
+      "cache.retain": -5.4624714851379395,
+      "experiment.ablation": -5.778034687042236,
+      "index.fresh": -6.350277423858643,
+      "access.token": -7.216877460479736,
+      "access.rotate": -7.735751152038574
+    },
+    "top_score": 0.770851194858551
+  },
+  {
+    "id": "q030",
+    "split": "test",
+    "question": "日志和脱敏评测结果分别留多久？",
+    "relevant_ids": [
+      "cache.retain"
+    ],
+    "reference_answer": "普通日志7天，脱敏评测结果90天。",
+    "type": "精确标识符",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "cache.retain",
+        "experiment.split",
+        "cache.log",
+        "eval.answer",
+        "search.rrf",
+        "index.version",
+        "eval.rank",
+        "access.token"
+      ],
+      "dense": [
+        "cache.retain",
+        "cache.log",
+        "answer.ground",
+        "index.delete",
+        "index.fresh",
+        "experiment.split",
+        "access.rotate",
+        "eval.recall"
+      ],
+      "hybrid": [
+        "cache.retain",
+        "cache.log",
+        "experiment.split",
+        "answer.ground",
+        "eval.answer",
+        "index.delete",
+        "index.fresh",
+        "search.rrf"
+      ],
+      "rerank": [
+        "cache.retain",
+        "index.fresh",
+        "index.delete",
+        "experiment.split",
+        "cache.log",
+        "search.rrf",
+        "answer.ground",
+        "eval.answer"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.19587499264162034,
+      "dense": 3.0707909900229424,
+      "hybrid": 3.2734579872339964,
+      "rerank": 38.959457975579426
+    },
+    "rerank_scores": {
+      "cache.retain": 9.943799018859863,
+      "index.fresh": -3.846998929977417,
+      "index.delete": -6.002838611602783,
+      "experiment.split": -6.854372978210449,
+      "cache.log": -6.895524978637695,
+      "search.rrf": -7.1473774909973145,
+      "answer.ground": -8.649893760681152,
+      "eval.answer": -8.994321823120117
+    },
+    "top_score": 9.943799018859863
+  },
+  {
+    "id": "q031",
+    "split": "test",
+    "question": "上传成功就代表立刻能搜到了吗？",
+    "relevant_ids": [
+      "index.fresh"
+    ],
+    "reference_answer": "不是，等待ready，通常5分钟内可检索。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "index.fresh",
+        "index.delete",
+        "access.role",
+        "access.token",
+        "access.rotate",
+        "answer.ground",
+        "answer.conflict",
+        "answer.attack"
+      ],
+      "dense": [
+        "index.fresh",
+        "answer.ground",
+        "delivery.local",
+        "eval.answer",
+        "search.bm25",
+        "access.role",
+        "eval.recall",
+        "ingest.formats"
+      ],
+      "hybrid": [
+        "index.fresh",
+        "answer.ground",
+        "access.role",
+        "index.delete",
+        "delivery.local",
+        "access.token",
+        "eval.answer",
+        "access.rotate"
+      ],
+      "rerank": [
+        "index.fresh",
+        "access.token",
+        "delivery.local",
+        "answer.ground",
+        "access.role",
+        "access.rotate",
+        "eval.answer",
+        "index.delete"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.21820800611749291,
+      "dense": 3.160958003718406,
+      "hybrid": 3.386833006516099,
+      "rerank": 46.86545800359454
+    },
+    "rerank_scores": {
+      "index.fresh": 2.3637855052948,
+      "access.token": -5.614986896514893,
+      "delivery.local": -5.71751594543457,
+      "answer.ground": -5.892261981964111,
+      "access.role": -5.948645114898682,
+      "access.rotate": -6.4792094230651855,
+      "eval.answer": -7.028881549835205,
+      "index.delete": -7.40372371673584
+    },
+    "top_score": 2.3637855052948
+  },
+  {
+    "id": "q032",
+    "split": "test",
+    "question": "用户点删除后，什么时候看不到，向量什么时候清完？",
+    "relevant_ids": [
+      "index.delete"
+    ],
+    "reference_answer": "先不可见及失效缓存，后台清理目标24小时内。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "index.delete",
+        "cache.retain",
+        "search.dense",
+        "delivery.local",
+        "experiment.ablation",
+        "ingest.duplicate",
+        "index.version",
+        "cache.key"
+      ],
+      "dense": [
+        "index.delete",
+        "cache.retain",
+        "ops.empty",
+        "ops.timeout",
+        "answer.ground",
+        "legacy.limit",
+        "index.fresh",
+        "ingest.duplicate"
+      ],
+      "hybrid": [
+        "index.delete",
+        "cache.retain",
+        "ingest.duplicate",
+        "ops.empty",
+        "search.dense",
+        "delivery.local",
+        "ops.timeout",
+        "answer.ground"
+      ],
+      "rerank": [
+        "index.delete",
+        "cache.retain",
+        "ops.timeout",
+        "search.dense",
+        "answer.ground",
+        "delivery.local",
+        "ops.empty",
+        "ingest.duplicate"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2165829937439412,
+      "dense": 3.1206659914460033,
+      "hybrid": 3.3436649828217924,
+      "rerank": 42.1942059911089
+    },
+    "rerank_scores": {
+      "index.delete": 0.8791419863700867,
+      "cache.retain": 0.19404864311218262,
+      "ops.timeout": -4.693928241729736,
+      "search.dense": -6.199974536895752,
+      "answer.ground": -7.373895645141602,
+      "delivery.local": -7.909769058227539,
+      "ops.empty": -8.051587104797363,
+      "ingest.duplicate": -8.089375495910645
+    },
+    "top_score": 0.8791419863700867
+  },
+  {
+    "id": "q033",
+    "split": "test",
+    "question": "更换向量模型只改问题这一侧可以吗？",
+    "relevant_ids": [
+      "index.version"
+    ],
+    "reference_answer": "不可以，需要重建全部文档向量并评测新索引。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "index.version",
+        "search.dense",
+        "access.role",
+        "rerank.cross",
+        "eval.rank",
+        "delivery.local",
+        "cache.log",
+        "eval.answer"
+      ],
+      "dense": [
+        "index.version",
+        "search.dense",
+        "rerank.cross",
+        "delivery.local",
+        "eval.answer",
+        "rerank.budget",
+        "rerank.limit",
+        "experiment.label"
+      ],
+      "hybrid": [
+        "index.version",
+        "search.dense",
+        "rerank.cross",
+        "delivery.local",
+        "eval.answer",
+        "access.role",
+        "eval.rank",
+        "rerank.budget"
+      ],
+      "rerank": [
+        "index.version",
+        "search.dense",
+        "rerank.cross",
+        "delivery.local",
+        "rerank.budget",
+        "eval.answer",
+        "eval.rank",
+        "access.role"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2042499982053414,
+      "dense": 3.0752499878872186,
+      "hybrid": 3.2860839855857193,
+      "rerank": 41.67108397814445
+    },
+    "rerank_scores": {
+      "index.version": 2.8040666580200195,
+      "search.dense": -1.5609890222549438,
+      "rerank.cross": -1.93540358543396,
+      "delivery.local": -5.747232913970947,
+      "rerank.budget": -5.8408308029174805,
+      "eval.answer": -6.345094203948975,
+      "eval.rank": -7.765526294708252,
+      "access.role": -9.03366470336914
+    },
+    "top_score": 2.8040666580200195
+  },
+  {
+    "id": "q034",
+    "split": "test",
+    "question": "查看私有资料的权限应该放在精排之前还是之后？",
+    "relevant_ids": [
+      "access.role"
+    ],
+    "reference_answer": "检索前执行项目成员权限检查，重排不能代替权限。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "access.role",
+        "cache.key",
+        "ops.empty",
+        "answer.attack",
+        "ops.timeout",
+        "answer.ground",
+        "delivery.local",
+        "rerank.limit"
+      ],
+      "dense": [
+        "answer.ground",
+        "answer.attack",
+        "delivery.accept",
+        "access.role",
+        "rerank.limit",
+        "ops.empty",
+        "eval.rank",
+        "legacy.limit"
+      ],
+      "hybrid": [
+        "access.role",
+        "answer.attack",
+        "answer.ground",
+        "ops.empty",
+        "rerank.limit",
+        "cache.key",
+        "delivery.accept",
+        "ops.timeout"
+      ],
+      "rerank": [
+        "access.role",
+        "rerank.limit",
+        "cache.key",
+        "ops.timeout",
+        "delivery.accept",
+        "ops.empty",
+        "answer.ground",
+        "answer.attack"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2398329961579293,
+      "dense": 3.099875000771135,
+      "hybrid": 3.34566600213293,
+      "rerank": 41.833166003925726
+    },
+    "rerank_scores": {
+      "access.role": -0.8520684838294983,
+      "rerank.limit": -2.8186779022216797,
+      "cache.key": -4.742737770080566,
+      "ops.timeout": -5.2190022468566895,
+      "delivery.accept": -5.519562244415283,
+      "ops.empty": -5.719926357269287,
+      "answer.ground": -6.328943252563477,
+      "answer.attack": -6.418533802032471
+    },
+    "top_score": -0.8520684838294983
+  },
+  {
+    "id": "q035",
+    "split": "test",
+    "question": "混合检索加精排是否一定优于单路，应该怎样判断？",
+    "relevant_ids": [
+      "experiment.ablation"
+    ],
+    "reference_answer": "做BM25、向量、混合及重排对照，同语料同问题同top-k，同时看质量耗时。",
+    "type": "同义改写",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "experiment.ablation",
+        "search.rrf",
+        "ingest.duplicate",
+        "delivery.owner",
+        "delivery.accept",
+        "ops.empty",
+        "answer.attack",
+        "legacy.redirect"
+      ],
+      "dense": [
+        "experiment.ablation",
+        "search.rrf",
+        "eval.rank",
+        "rerank.budget",
+        "delivery.accept",
+        "ops.timeout",
+        "eval.answer",
+        "rerank.limit"
+      ],
+      "hybrid": [
+        "experiment.ablation",
+        "search.rrf",
+        "delivery.accept",
+        "eval.rank",
+        "ingest.duplicate",
+        "delivery.owner",
+        "rerank.budget",
+        "ops.timeout"
+      ],
+      "rerank": [
+        "experiment.ablation",
+        "search.rrf",
+        "rerank.budget",
+        "delivery.accept",
+        "eval.rank",
+        "ops.timeout",
+        "delivery.owner",
+        "ingest.duplicate"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.2304170047864318,
+      "dense": 3.107875003479421,
+      "hybrid": 3.3452080097049475,
+      "rerank": 41.4223330153618
+    },
+    "rerank_scores": {
+      "experiment.ablation": -1.6928625106811523,
+      "search.rrf": -2.2942960262298584,
+      "rerank.budget": -5.546015739440918,
+      "delivery.accept": -5.963588237762451,
+      "eval.rank": -6.267703533172607,
+      "ops.timeout": -6.629780292510986,
+      "delivery.owner": -7.428609371185303,
+      "ingest.duplicate": -8.138007164001465
+    },
+    "top_score": -1.6928625106811523
+  },
+  {
+    "id": "q036",
+    "split": "test",
+    "question": "HTTP 301 就是把搜索结果再排一次吗？",
+    "relevant_ids": [
+      "legacy.redirect"
+    ],
+    "reference_answer": "不是，301是永久网址重定向，重排是Rerank。",
+    "type": "术语干扰",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "legacy.redirect",
+        "eval.recall",
+        "experiment.split",
+        "delivery.local",
+        "access.rotate",
+        "rerank.limit",
+        "eval.rank",
+        "access.token"
+      ],
+      "dense": [
+        "legacy.redirect",
+        "search.rrf",
+        "eval.rank",
+        "ops.timeout",
+        "experiment.ablation",
+        "ops.empty",
+        "search.bm25",
+        "rerank.limit"
+      ],
+      "hybrid": [
+        "legacy.redirect",
+        "eval.rank",
+        "rerank.limit",
+        "eval.recall",
+        "search.rrf",
+        "experiment.split",
+        "delivery.local",
+        "ops.timeout"
+      ],
+      "rerank": [
+        "legacy.redirect",
+        "rerank.limit",
+        "eval.recall",
+        "ops.timeout",
+        "eval.rank",
+        "experiment.split",
+        "delivery.local",
+        "search.rrf"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.22841700410936028,
+      "dense": 3.049249993637204,
+      "hybrid": 3.2843749941093847,
+      "rerank": 40.075999990222044
+    },
+    "rerank_scores": {
+      "legacy.redirect": 7.057559013366699,
+      "rerank.limit": -4.463647365570068,
+      "eval.recall": -5.152106285095215,
+      "ops.timeout": -5.3657002449035645,
+      "eval.rank": -5.387448310852051,
+      "experiment.split": -6.3593244552612305,
+      "delivery.local": -6.66753625869751,
+      "search.rrf": -7.152891635894775
+    },
+    "top_score": 7.057559013366699
+  },
+  {
+    "id": "q037",
+    "split": "test",
+    "question": "这个系统的生产QPS能到多少？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足，小规模演示不能推算生产QPS。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "answer.attack",
+        "delivery.local",
+        "ingest.formats",
+        "eval.rank",
+        "eval.recall",
+        "eval.answer",
+        "delivery.owner",
+        "access.rotate"
+      ],
+      "dense": [
+        "rerank.cross",
+        "legacy.limit",
+        "ops.timeout",
+        "ingest.formats",
+        "eval.rank",
+        "rerank.budget",
+        "ops.limit",
+        "index.fresh"
+      ],
+      "hybrid": [
+        "ingest.formats",
+        "eval.rank",
+        "answer.attack",
+        "rerank.cross",
+        "delivery.local",
+        "legacy.limit",
+        "ops.timeout",
+        "eval.recall"
+      ],
+      "rerank": [
+        "legacy.limit",
+        "ingest.formats",
+        "rerank.cross",
+        "ops.timeout",
+        "delivery.local",
+        "eval.rank",
+        "eval.recall",
+        "answer.attack"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.19512500148266554,
+      "dense": 3.0512079974869266,
+      "hybrid": 3.253207993111573,
+      "rerank": 39.94145800243132
+    },
+    "rerank_scores": {
+      "legacy.limit": -6.121532917022705,
+      "ingest.formats": -6.1295905113220215,
+      "rerank.cross": -7.339796543121338,
+      "ops.timeout": -7.383511543273926,
+      "delivery.local": -8.005392074584961,
+      "eval.rank": -8.10209846496582,
+      "eval.recall": -8.30628776550293,
+      "answer.attack": -9.116915702819824
+    },
+    "top_score": -6.121532917022705
+  },
+  {
+    "id": "q038",
+    "split": "test",
+    "question": "Atlas 的创始人毕业于哪所大学？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "legacy.limit",
+        "access.token",
+        "ingest.formats",
+        "eval.rank",
+        "eval.recall",
+        "eval.answer",
+        "delivery.owner",
+        "answer.attack"
+      ],
+      "dense": [
+        "delivery.owner",
+        "access.token",
+        "experiment.label",
+        "index.version",
+        "delivery.local",
+        "eval.rank",
+        "search.bm25",
+        "search.rrf"
+      ],
+      "hybrid": [
+        "access.token",
+        "delivery.owner",
+        "eval.rank",
+        "legacy.limit",
+        "experiment.label",
+        "ingest.formats",
+        "index.version",
+        "delivery.local"
+      ],
+      "rerank": [
+        "access.token",
+        "delivery.local",
+        "index.version",
+        "delivery.owner",
+        "legacy.limit",
+        "eval.rank",
+        "ingest.formats",
+        "experiment.label"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.20475000201258808,
+      "dense": 3.0578330042771995,
+      "hybrid": 3.269000008003786,
+      "rerank": 45.740208006463945
+    },
+    "rerank_scores": {
+      "access.token": -6.2549614906311035,
+      "delivery.local": -7.838522434234619,
+      "index.version": -8.01172161102295,
+      "delivery.owner": -8.100103378295898,
+      "legacy.limit": -8.244587898254395,
+      "eval.rank": -8.874910354614258,
+      "ingest.formats": -8.975111961364746,
+      "experiment.label": -9.084643363952637
+    },
+    "top_score": -6.2549614906311035
+  },
+  {
+    "id": "q039",
+    "split": "test",
+    "question": "这个项目可以用哪张银行卡付款？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "access.role",
+        "eval.rank",
+        "access.rotate",
+        "ops.empty",
+        "ops.limit",
+        "cache.log",
+        "delivery.local",
+        "delivery.owner"
+      ],
+      "dense": [
+        "delivery.local",
+        "access.role",
+        "rerank.cross",
+        "ingest.formats",
+        "delivery.owner",
+        "experiment.label",
+        "ops.limit",
+        "access.rotate"
+      ],
+      "hybrid": [
+        "access.role",
+        "delivery.local",
+        "access.rotate",
+        "ops.limit",
+        "delivery.owner",
+        "eval.rank",
+        "rerank.cross",
+        "ingest.formats"
+      ],
+      "rerank": [
+        "eval.rank",
+        "access.rotate",
+        "rerank.cross",
+        "ops.limit",
+        "ingest.formats",
+        "delivery.local",
+        "access.role",
+        "delivery.owner"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.22858299780637026,
+      "dense": 3.1014160049380735,
+      "hybrid": 3.3368739968864247,
+      "rerank": 39.732165983878076
+    },
+    "rerank_scores": {
+      "eval.rank": -5.857723712921143,
+      "access.rotate": -6.085827350616455,
+      "rerank.cross": -6.219902038574219,
+      "ops.limit": -6.293238162994385,
+      "ingest.formats": -6.874840259552002,
+      "delivery.local": -6.938191890716553,
+      "access.role": -7.722898006439209,
+      "delivery.owner": -8.350930213928223
+    },
+    "top_score": -5.857723712921143
+  },
+  {
+    "id": "q040",
+    "split": "test",
+    "question": "已经实现了多少真实用户满意度提升？",
+    "relevant_ids": [],
+    "reference_answer": "资料不足，没有真实用户满意度数据。",
+    "type": "无答案",
+    "label_status": "AI初稿，待用户审核",
+    "rankings": {
+      "bm25": [
+        "delivery.local",
+        "index.delete",
+        "delivery.owner",
+        "access.rotate",
+        "cache.retain",
+        "cache.key",
+        "access.token",
+        "access.role"
+      ],
+      "dense": [
+        "delivery.local",
+        "answer.ground",
+        "delivery.accept",
+        "eval.answer",
+        "index.fresh",
+        "search.dense",
+        "eval.rank",
+        "ops.limit"
+      ],
+      "hybrid": [
+        "delivery.local",
+        "answer.ground",
+        "index.delete",
+        "delivery.accept",
+        "delivery.owner",
+        "access.rotate",
+        "eval.answer",
+        "cache.retain"
+      ],
+      "rerank": [
+        "delivery.local",
+        "cache.retain",
+        "delivery.accept",
+        "access.rotate",
+        "answer.ground",
+        "eval.answer",
+        "index.delete",
+        "delivery.owner"
+      ]
+    },
+    "timings_ms": {
+      "bm25": 0.18891599029302597,
+      "dense": 3.073957996093668,
+      "hybrid": 3.2704159821150824,
+      "rerank": 34.169873979408294
+    },
+    "rerank_scores": {
+      "delivery.local": -4.059168338775635,
+      "cache.retain": -6.998841285705566,
+      "delivery.accept": -8.258467674255371,
+      "access.rotate": -9.067267417907715,
+      "answer.ground": -9.567532539367676,
+      "eval.answer": -9.755070686340332,
+      "index.delete": -9.904328346252441,
+      "delivery.owner": -10.191162109375
+    },
+    "top_score": -4.059168338775635
+  }
+]

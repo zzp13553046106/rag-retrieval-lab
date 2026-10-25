@@ -1,0 +1,6 @@
+numpy==2.3.5
+torch==2.14.1
+transformers==4.57.6
+huggingface-hub==0.36.2
+jieba==0.42.1
+sentencepiece==0.2.2

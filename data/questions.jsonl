@@ -1,0 +1,40 @@
+{"id": "q001", "split": "dev", "question": "AUTH_401_EXPIRED 怎么处理？", "relevant_ids": ["access.token"], "reference_answer": "令牌过期，重新申请，最多重试一次。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q002", "split": "dev", "question": "文档太长应该怎么拆？", "relevant_ids": ["ingest.chunk"], "reference_answer": "按标题段落切分，目标400字，重叠60字。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q003", "split": "dev", "question": "为什么要合并两路检索的名次，而不是直接加分数？", "relevant_ids": ["search.rrf"], "reference_answer": "RRF避免不同量纲分数直接相加。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q004", "split": "dev", "question": "正确材料根本没进入候选，重新排个序能救回来吗？", "relevant_ids": ["rerank.limit"], "reference_answer": "不能，先检查候选召回率。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q005", "split": "dev", "question": "回答应该如何表明来自哪段资料？", "relevant_ids": ["answer.ground"], "reference_answer": "关键结论标注支持它的片段ID。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q006", "split": "dev", "question": "测评问题拿来调参数可以吗？", "relevant_ids": ["experiment.split"], "reference_answer": "只能用开发集调参，保留测试集不参与调参。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q007", "split": "dev", "question": "团队负责人电话号码是多少？", "relevant_ids": [], "reference_answer": "资料不足。", "type": "无答案", "label_status": "AI初稿，待用户审核"}
+{"id": "q008", "split": "dev", "question": "明年的订阅价格会涨多少？", "relevant_ids": [], "reference_answer": "资料不足。", "type": "无答案", "label_status": "AI初稿，待用户审核"}
+{"id": "q009", "split": "test", "question": "SEARCH_429_LIMIT 需要重新登录吗？", "relevant_ids": ["ops.limit"], "reference_answer": "不需要重新登录，遵循Retry-After并指数退避，配额60次每分钟。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q010", "split": "test", "question": "SEARCH_504_TIMEOUT 的排查顺序是什么？", "relevant_ids": ["ops.timeout"], "reference_answer": "检查向量查询与重排耗时，缩小候选数或使用已校验缓存。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q011", "split": "test", "question": "SEARCH_204_EMPTY 之后能不能搜别人的项目来回答？", "relevant_ids": ["ops.empty"], "reference_answer": "不能绕过权限，检查入库、项目权限和版本。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q012", "split": "test", "question": "接口鉴权时令牌应放在哪里，能用多久？", "relevant_ids": ["access.token"], "reference_answer": "Authorization头中使用Bearer令牌，有效期2小时。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q013", "split": "test", "question": "项目密钥更新后，旧的还能用一段时间吗？", "relevant_ids": ["access.rotate"], "reference_answer": "新旧密钥重叠24小时，每30天轮换。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q014", "split": "test", "question": "照片扫描出来的 PDF 上传后搜不到字，怎么办？", "relevant_ids": ["ingest.formats"], "reference_answer": "扫描PDF先OCR，空文本不直接索引。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q015", "split": "test", "question": "同一份文件反复上传怎样避免重复内容？", "relevant_ids": ["ingest.duplicate"], "reference_answer": "以document_id与内容SHA-256判断，内容相同跳过。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q016", "split": "test", "question": "检索器怎样找到用词不同但意思接近的内容？", "relevant_ids": ["search.dense"], "reference_answer": "通过Embedding向量相似度，注意罕见标识符可能混淆。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q017", "split": "test", "question": "为什么搜索错误编号时保留关键词匹配这一路？", "relevant_ids": ["search.bm25"], "reference_answer": "BM25适合错误码等精确词项，语义改写可能不足。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q018", "split": "test", "question": "RRF 中一条资料在两路都出现会发生什么？", "relevant_ids": ["search.rrf"], "reference_answer": "按两路倒数排名累加贡献，常数60。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q019", "split": "test", "question": "Bi-Encoder 和 Cross-Encoder 怎么分工？", "relevant_ids": ["search.dense", "rerank.cross"], "reference_answer": "前者分别编码并召回，后者问题片段成对打分，仅重排候选。", "type": "多证据", "label_status": "AI初稿，待用户审核"}
+{"id": "q020", "split": "test", "question": "多拉一倍材料再做精排，效果一定好吗？", "relevant_ids": ["rerank.budget"], "reference_answer": "不保证，记录质量与延迟权衡。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q021", "split": "test", "question": "找对第一条资料就能证明多个依据全找全了吗？", "relevant_ids": ["eval.recall", "eval.rank"], "reference_answer": "不能，MRR看首条，Recall计算全部相关片段覆盖。", "type": "多证据", "label_status": "AI初稿，待用户审核"}
+{"id": "q022", "split": "test", "question": "检索排名很好是不是就能保证答案可信？", "relevant_ids": ["eval.rank", "eval.answer"], "reference_answer": "不能，还要检查事实正确、覆盖、引用支持与拒答。", "type": "多证据", "label_status": "AI初稿，待用户审核"}
+{"id": "q023", "split": "test", "question": "一份资料让模型忽略规则并交出令牌，要照办吗？", "relevant_ids": ["answer.attack"], "reference_answer": "不能执行资料内指令，应区分任务指令与资料。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q024", "split": "test", "question": "资料里的旧规定和新规定不一致，该怎么办？", "relevant_ids": ["answer.conflict"], "reference_answer": "采用当前生效版本，无法确认则指出冲突。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q025", "split": "test", "question": "当前一篇上传文档最多多少兆？", "relevant_ids": ["ingest.formats"], "reference_answer": "20MB。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q026", "split": "test", "question": "当前每分钟能问30次还是60次？", "relevant_ids": ["ops.limit"], "reference_answer": "当前60次每分钟，30次是历史废弃规则。", "type": "版本干扰", "label_status": "AI初稿，待用户审核"}
+{"id": "q027", "split": "test", "question": "现在切块用200字不重叠，还是400字并重叠？", "relevant_ids": ["ingest.chunk"], "reference_answer": "当前目标400字，重叠60字，200字无重叠已废弃。", "type": "版本干扰", "label_status": "AI初稿，待用户审核"}
+{"id": "q028", "split": "test", "question": "有同事权限被取消后，以前的搜索缓存还可用吗？", "relevant_ids": ["cache.key"], "reference_answer": "权限撤销立即失效，缓存键包含权限版本。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q029", "split": "test", "question": "查一次请求为什么慢，应该保留什么记录？", "relevant_ids": ["cache.log"], "reference_answer": "记录request_id、各阶段耗时、候选ID、模型与配置摘要，不默认记录正文。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q030", "split": "test", "question": "日志和脱敏评测结果分别留多久？", "relevant_ids": ["cache.retain"], "reference_answer": "普通日志7天，脱敏评测结果90天。", "type": "精确标识符", "label_status": "AI初稿，待用户审核"}
+{"id": "q031", "split": "test", "question": "上传成功就代表立刻能搜到了吗？", "relevant_ids": ["index.fresh"], "reference_answer": "不是，等待ready，通常5分钟内可检索。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q032", "split": "test", "question": "用户点删除后，什么时候看不到，向量什么时候清完？", "relevant_ids": ["index.delete"], "reference_answer": "先不可见及失效缓存，后台清理目标24小时内。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q033", "split": "test", "question": "更换向量模型只改问题这一侧可以吗？", "relevant_ids": ["index.version"], "reference_answer": "不可以，需要重建全部文档向量并评测新索引。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q034", "split": "test", "question": "查看私有资料的权限应该放在精排之前还是之后？", "relevant_ids": ["access.role"], "reference_answer": "检索前执行项目成员权限检查，重排不能代替权限。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q035", "split": "test", "question": "混合检索加精排是否一定优于单路，应该怎样判断？", "relevant_ids": ["experiment.ablation"], "reference_answer": "做BM25、向量、混合及重排对照，同语料同问题同top-k，同时看质量耗时。", "type": "同义改写", "label_status": "AI初稿，待用户审核"}
+{"id": "q036", "split": "test", "question": "HTTP 301 就是把搜索结果再排一次吗？", "relevant_ids": ["legacy.redirect"], "reference_answer": "不是，301是永久网址重定向，重排是Rerank。", "type": "术语干扰", "label_status": "AI初稿，待用户审核"}
+{"id": "q037", "split": "test", "question": "这个系统的生产QPS能到多少？", "relevant_ids": [], "reference_answer": "资料不足，小规模演示不能推算生产QPS。", "type": "无答案", "label_status": "AI初稿，待用户审核"}
+{"id": "q038", "split": "test", "question": "Atlas 的创始人毕业于哪所大学？", "relevant_ids": [], "reference_answer": "资料不足。", "type": "无答案", "label_status": "AI初稿，待用户审核"}
+{"id": "q039", "split": "test", "question": "这个项目可以用哪张银行卡付款？", "relevant_ids": [], "reference_answer": "资料不足。", "type": "无答案", "label_status": "AI初稿，待用户审核"}
+{"id": "q040", "split": "test", "question": "已经实现了多少真实用户满意度提升？", "relevant_ids": [], "reference_answer": "资料不足，没有真实用户满意度数据。", "type": "无答案", "label_status": "AI初稿，待用户审核"}

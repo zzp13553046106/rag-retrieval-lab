@@ -1,0 +1,47 @@
+{
+  "config": {
+    "candidate_k": 8,
+    "context_k": 3,
+    "rrf_constant": 60,
+    "embedding_max_tokens": 512,
+    "reranker_max_tokens": 512,
+    "seed": 42,
+    "device": "cpu",
+    "threads": 4
+  },
+  "models": {
+    "embedding": {
+      "model": "BAAI/bge-small-zh-v1.5",
+      "revision": "7999e1d3359715c523056ef9478215996d62a620"
+    },
+    "reranker": {
+      "model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "revision": "1427fd652930e4ba29e8149678df786c240d8825"
+    },
+    "generator": {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+    }
+  },
+  "python": "3.12.14",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "torch": "2.14.1",
+  "transformers": "4.57.6",
+  "numpy": "2.3.5",
+  "sha256": {
+    "rag.py": "a34aedde154846be2c3aab8542f71352151a2d8154d25d221c8e099e622c920c",
+    "data/questions.jsonl": "139d80b0dbb5488248d1054a1069f60f6e9075e95b1c091349c0fddf4baf61f8",
+    "data/docs/access.md": "7a472d173f9cbed23dcd29a1f6088a6358e233ff4fff5615551396b2ddd60f3d",
+    "data/docs/answer.md": "5762f4291f70eee2f5a7b16caff4ad12b26696e3c3dff6a09a1707d399fc6d7a",
+    "data/docs/cache.md": "b3f6aac557fd5061e561136c65fca5c15e589f44b72a81d2ccc14f30c74a4bef",
+    "data/docs/delivery.md": "1944c7b27ed2011fafbe8138639357486f492995fe3419e34960162ec5436aec",
+    "data/docs/eval.md": "1fbe759964658e8eaee6580c1e379beb20964d1b9c1c269f9bef43d26931c690",
+    "data/docs/experiment.md": "3372f0544bc96106a11af2d4797b522e1c2f2a3074f9786ab034e0600574bd1f",
+    "data/docs/index.md": "9358b98a7ce897ce55b7ad9947ef8bff6ce2e0073feccf3756a8fdfbc13579a4",
+    "data/docs/ingest.md": "9a81ae00eed1931d978c1304917ab06767070e05dc75a3570601b328b6dbd22d",
+    "data/docs/legacy.md": "0df7d50c9fa3881d595bb3e72432955fa8e644976708cc913d04b0bbccff9da9",
+    "data/docs/ops.md": "6e7aaa5169a0bb07340272043b932b68cf984b427eecf078dde27a800ac3959b",
+    "data/docs/rerank.md": "33d83687f297590bbbbed0556434534d8a9259e437de0001d7f1d3043c3a755a",
+    "data/docs/search.md": "437842b9d488b545f05ea8f4d555e8d09f8e206d3ed52b08069c3f7fc455aceb"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "config": {
+    "candidate_k": 8,
+    "context_k": 3,
+    "rrf_constant": 60,
+    "embedding_max_tokens": 512,
+    "reranker_max_tokens": 512,
+    "seed": 42,
+    "device": "cpu",
+    "threads": 4
+  },
+  "models": {
+    "embedding": {
+      "model": "BAAI/bge-small-zh-v1.5",
+      "revision": "7999e1d3359715c523056ef9478215996d62a620"
+    },
+    "reranker": {
+      "model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "revision": "1427fd652930e4ba29e8149678df786c240d8825"
+    },
+    "generator": {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+    }
+  },
+  "chunks": 36,
+  "questions": 40,
+  "label_status": "全部为AI合成初稿，待人工审核；测试结果是小规模内部冒烟评测",
+  "calibration": {
+    "threshold": -2.7878908812999725,
+    "dev_balanced_accuracy": 1.0,
+    "source": "仅8条开发集，含2条无答案；未经人工审核"
+  },
+  "splits": {
+    "dev": {
+      "total": 8,
+      "answerable": 6,
+      "unanswerable": 2,
+      "methods": {
+        "bm25": {
+          "Recall@3": 0.8333333333333334,
+          "MRR@3": 0.75,
+          "nDCG@3": 0.7718216255952429,
+          "Recall@8": 0.8333333333333334,
+          "p50_ms": 0.21860400011064485,
+          "p95_ms": 0.2907016496465076
+        },
+        "dense": {
+          "Recall@3": 0.8333333333333334,
+          "MRR@3": 0.75,
+          "nDCG@3": 0.7718216255952429,
+          "Recall@8": 1.0,
+          "p50_ms": 3.099124995060265,
+          "p95_ms": 3.199485297955107
+        },
+        "hybrid": {
+          "Recall@3": 0.8333333333333334,
+          "MRR@3": 0.75,
+          "nDCG@3": 0.7718216255952429,
+          "Recall@8": 1.0,
+          "p50_ms": 3.3196249933098443,
+          "p95_ms": 3.4909411071566865
+        },
+        "rerank": {
+          "Recall@3": 1.0,
+          "MRR@3": 1.0,
+          "nDCG@3": 1.0,
+          "Recall@8": 1.0,
+          "p50_ms": 41.11949899379397,
+          "p95_ms": 45.85345819868962
+        }
+      },
+      "threshold_gate": {
+        "answerable_retention": 1.0,
+        "unanswerable_rejection": 1.0,
+        "note": "只评估重排分数门控，不是最终生成答案正确率"
+      }
+    },
+    "test": {
+      "total": 32,
+      "answerable": 28,
+      "unanswerable": 4,
+      "methods": {
+        "bm25": {
+          "Recall@3": 0.75,
+          "MRR@3": 0.6964285714285714,
+          "nDCG@3": 0.6944085644083577,
+          "Recall@8": 0.9285714285714286,
+          "p50_ms": 0.22789600916439667,
+          "p95_ms": 0.2594392542960122
+        },
+        "dense": {
+          "Recall@3": 0.8392857142857143,
+          "MRR@3": 0.7678571428571429,
+          "nDCG@3": 0.7774212843079552,
+          "Recall@8": 0.9642857142857143,
+          "p50_ms": 3.1095000013010576,
+          "p95_ms": 3.154521192482207
+        },
+        "hybrid": {
+          "Recall@3": 0.8571428571428571,
+          "MRR@3": 0.7976190476190477,
+          "nDCG@3": 0.801551421551215,
+          "Recall@8": 0.9642857142857143,
+          "p50_ms": 3.3442279891460203,
+          "p95_ms": 3.399268354405649
+        },
+        "rerank": {
+          "Recall@3": 0.9464285714285714,
+          "MRR@3": 0.875,
+          "nDCG@3": 0.8816970267775334,
+          "Recall@8": 0.9642857142857143,
+          "p50_ms": 41.45124951173784,
+          "p95_ms": 47.17987240146613
+        }
+      },
+      "threshold_gate": {
+        "answerable_retention": 0.8928571428571429,
+        "unanswerable_rejection": 1.0,
+        "note": "只评估重排分数门控，不是最终生成答案正确率"
+      }
+    }
+  },
+  "startup_and_index_ms": 1658.3621250028955
+}
