@@ -43,11 +43,23 @@ MODELS = {'embedding': 'BAAI/bge-small-zh-v1.5',
 # candidate_k=8：每路先取8条，融合后也只保留8条，供重排使用。
 # context_k=3：重排后给回答模型3条，不是把所有候选都塞进提示词。
 # rrf_constant=60：平滑各名次的贡献；它不是相似度阈值。
-# 注意：当前截断长度512和CPU使用方式在下方函数中直接指定；
-# 这里只改 max_tokens 或 device 字段，不会自动改变相应实现。
+# 两个max_tokens字段分别控制向量编码和重排的输入截断长度。
+# 当前仅实现CPU推理；不支持的device会在模型加载前明确报错。
 CONFIG = {'candidate_k': 8, 'context_k': 3, 'rrf_constant': 60,
           'embedding_max_tokens': 512, 'reranker_max_tokens': 512,
           'seed': 42, 'device': 'cpu', 'threads': 4}
+
+def validate_config():
+    # 在加载模型前检查配置，避免空候选或非法线程数引起后续崩溃。
+    for name in ['candidate_k', 'context_k', 'embedding_max_tokens',
+                 'reranker_max_tokens', 'threads']:
+        if type(CONFIG[name]) is not int or CONFIG[name] <= 0:
+            raise ValueError(f'{name}必须为正整数')
+    constant = CONFIG['rrf_constant']
+    if not isinstance(constant, (int, float)) or not math.isfinite(constant) or constant < 0:
+        raise ValueError('rrf_constant必须为有限非负数')
+    if CONFIG['device'] != 'cpu':
+        raise ValueError('当前实现仅支持device=cpu')
 
 def read_jsonl(path):
     # JSONL是一行一个JSON对象。评测文件每行保存一道题及其标准证据。
@@ -131,6 +143,8 @@ class BM25:
 def rank(scores, k):
     # 返回前k个数组下标，不返回分数本身。负号实现分数降序。
     # 分数相同时按原下标排序，让结果稳定、便于复现。
+    if type(k) is not int or k < 0:
+        raise ValueError('排名数量k必须为非负整数')
     return sorted(range(len(scores)), key=lambda i: (-float(scores[i]), i))[:k]
 
 def rrf(rankings, constant=60):
@@ -141,6 +155,8 @@ def rrf(rankings, constant=60):
     # 这里的rank从1开始，与Python数组下标从0开始不同。
     # 算法自测：constant变大时，前几名的贡献差距会怎样变化？
     # 融合分数只表达这套规则下的排序偏好，不代表资料绝对正确。
+    if not isinstance(constant, (int, float)) or not math.isfinite(constant) or constant < 0:
+        raise ValueError('RRF常数必须为有限非负数')
     scores = collections.defaultdict(float)
     for ranking in rankings:
         for position, idx in enumerate(ranking, 1): scores[idx] += 1/(constant+position)
@@ -149,6 +165,8 @@ def rrf(rankings, constant=60):
 def metrics(ids, relevant, k=3):
     # ids：实际检索排名（证据ID）；relevant：人工/初稿标签要求的相关证据。
     # 无答案题没有“应该找出的证据”，单独评估拒答，不混入检索召回率。
+    if type(k) is not int or k <= 0:
+        raise ValueError('评测数量k必须为正整数')
     if not relevant: return None
     relevant = set(relevant)
     found = [int(x in relevant) for x in ids[:k]]
@@ -168,6 +186,7 @@ class Engine:
     # self.xxx表示这个对象保存的数据，后续方法可以反复使用。
     # 初始化主要是准备工作；search()才开始处理具体问题。
     def __init__(self, generator=False):
+        validate_config()
         import torch
         from transformers import AutoTokenizer, AutoModel, AutoModelForSequenceClassification
         from huggingface_hub import snapshot_download
@@ -205,7 +224,10 @@ class Engine:
         self.rm = AutoModelForSequenceClassification.from_pretrained(self.paths['reranker'], local_files_only=True).eval()
         # 向量缓存同时包含正文和模型版本摘要；资料或模型变化后自动重建。
         # fingerprint是内容摘要；资料不变、模型不变，就复用原文档向量。
-        fingerprint = hashlib.sha256(json.dumps([self.texts, self.lock['embedding']], ensure_ascii=False).encode()).hexdigest()
+        # 截断长度变化也必须重建向量，保证问题与文档使用一致的编码条件。
+        fingerprint = hashlib.sha256(json.dumps(
+            [self.texts, self.lock['embedding'], CONFIG['embedding_max_tokens']],
+            ensure_ascii=False).encode()).hexdigest()
         vecpath = CACHE / f'vectors-{fingerprint}.npy'
         if vecpath.exists(): self.vectors = np.load(vecpath)
         else:
@@ -228,7 +250,7 @@ class Engine:
             # 每批最多16条。padding补齐批内长度，truncation截断超长输入。
             # 512的单位是token，和切块使用的“400个字符”不是同一单位。
             inputs=self.et(texts[start:start+16], padding=True, truncation=True,
-                           max_length=512, return_tensors='pt')
+                           max_length=CONFIG['embedding_max_tokens'], return_tensors='pt')
             with self.torch.inference_mode():
                 # inference_mode关闭梯度记录，节约推理开销；这里不更新参数。
                 # BGE按该模型的用法取第一个token的表示作为整段文本向量。
@@ -249,13 +271,15 @@ class Engine:
             batch=candidates[start:start+8]
             # [query]*len(batch)把同一问题复制多份，与候选片段一一配对。
             inp=self.rt([query]*len(batch), [self.texts[i] for i in batch], padding=True,
-                        truncation=True, max_length=512, return_tensors='pt')
+                        truncation=True, max_length=CONFIG['reranker_max_tokens'], return_tensors='pt')
             with self.torch.inference_mode():
                 # logits是模型原始相关性分数；这里没有把它校准成概率。
                 scores.extend(self.rm(**inp).logits.reshape(-1).tolist())
         pairs=sorted(zip(candidates,scores),key=lambda x:(-x[1],x[0]))
         return [i for i,s in pairs], {self.chunks[i]['id']:s for i,s in pairs}
     def search(self, query):
+        if not isinstance(query, str) or not query.strip():
+            raise ValueError('查询问题不能为空')
         # 【把刚才的讲解直接放在代码这里】
         # query是用户的问题；self是当前Engine对象，里面保存资料和模型。
         # b、d、h、r都是“按相关程度排列的片段下标列表”，不是回答文本：
@@ -328,12 +352,21 @@ class Engine:
         # ranked是重排后的下标列表；先选前3条，再取出完整片段对象。
         selected=ranked[:CONFIG['context_k']]
         evidence=[self.chunks[i] for i in selected]
+        # 没有候选时安全拒答，不访问空列表，也不调用回答模型。
+        if not evidence:
+            return {'answer':'资料不足，无法根据当前知识库回答。', 'refused':True,
+                    'evidence':[], 'generation_ms':0, 'mode':'无候选证据拒答',
+                    'cited_ids':[], 'invalid_citations':[], 'missing_citations':False}
         # 用最高重排分数做一个简单的回答门控：分数太低就直接拒答。
         # threshold仅用开发集确定；这个粗略门控可能误拒有答案的问题。
         # 分数高也不保证答案有依据，更不是经过校准的置信概率。
-        if scores[evidence[0]['id']] < threshold:
+        top_score = scores.get(evidence[0]['id'])
+        if top_score is None or not math.isfinite(top_score) or not math.isfinite(threshold):
+            raise ValueError('重排分数与拒答阈值必须为有限数值')
+        if top_score < threshold:
             return {'answer':'资料不足，无法根据当前知识库回答。', 'refused':True,
-                    'evidence':evidence, 'generation_ms':0, 'mode':'开发集阈值拒答'}
+                    'evidence':evidence, 'generation_ms':0, 'mode':'开发集阈值拒答',
+                    'cited_ids':[], 'invalid_citations':[], 'missing_citations':False}
         # 将“证据ID、标题、原文”一起放入上下文，便于模型引用。
         context='\n\n'.join(f"[{c['id']}] {c['title']}\n{c['text']}" for c in evidence)
         # system说明回答规则；user消息提供资料和问题。
@@ -354,16 +387,23 @@ class Engine:
         # 这里只验证ID合法，不检查语义支持；“引用存在”不等于“引用正确”。
         cited=re.findall(r'\[([^\[\]]+)\]',answer)
         valid={c['id'] for c in evidence}
-        # refused只是用“资料不足”字样做的粗略检测，并非完整的语义判定。
-        return {'answer':answer,'refused':'资料不足' in answer,'evidence':evidence,
+        # 按回答开头检测明确拒答；正文讨论“资料不足”不等于在拒绝当前问题。
+        # 这仍是简单规则，并非完整的语义判定。
+        refused = answer.strip().startswith('资料不足')
+        return {'answer':answer,'refused':refused,'evidence':evidence,
                 'generation_ms':(time.perf_counter()-start)*1000,'mode':'本地Qwen生成',
                 'cited_ids':cited,'invalid_citations':[x for x in cited if x not in valid],
+                'missing_citations':not refused and not cited,
                 'human_review':'待审核；引用ID合法不代表引用支持结论'}
 
 def calibrate(rows):
     """仅开发集，用平衡准确率选阈值；小样本阈值不等于可用的生产拒答器。"""
     # rows里每道题都有最高重排分数，以及是否有标准证据。
     # 将相邻分数中点作为候选阈值，也考虑“全部放行/全部拦截”的边界。
+    if not rows or not any(r['relevant_ids'] for r in rows) or not any(not r['relevant_ids'] for r in rows):
+        raise ValueError('阈值校准需要同时包含有答案与无答案的开发题')
+    if any(not math.isfinite(r['top_score']) for r in rows):
+        raise ValueError('阈值校准分数必须为有限数值')
     values=sorted({r['top_score'] for r in rows})
     candidates=[values[0]-1]+[(a+b)/2 for a,b in zip(values,values[1:])]+[values[-1]+1]
     def score(t):
@@ -477,6 +517,8 @@ def main():
     ask=sub.add_parser('ask')
     ask.add_argument('question')
     args=p.parse_args()
+    if args.command == 'ask' and not args.question.strip():
+        p.error('问题不能为空')
     # 只做检索评测时，不必加载回答模型；其余三种命令会加载。
     start=time.perf_counter()
     e=Engine(generator=args.command in ['demo','ask','prepare'])

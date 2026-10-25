@@ -1,0 +1,122 @@
+{
+  "commands": [
+    {
+      "command": "unit",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 0.971
+    },
+    {
+      "command": "dependencies",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 0.183
+    },
+    {
+      "command": "shell",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 0.004
+    },
+    {
+      "command": "prepare",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 3.808
+    },
+    {
+      "command": "evaluate",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 3.919
+    },
+    {
+      "command": "demo",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 9.06
+    },
+    {
+      "command": "ask",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "passed": true,
+      "elapsed_seconds": 7.523
+    },
+    {
+      "command": "blank-ask",
+      "exit_code": 2,
+      "expected_exit_code": 2,
+      "passed": true,
+      "elapsed_seconds": 0.06
+    }
+  ],
+  "end_to_end_questions": 40,
+  "unchanged_ranking_questions": 40,
+  "devices": {
+    "embedding": "cpu",
+    "reranker": "cpu",
+    "generator": "cpu"
+  },
+  "vector_shape": [
+    36,
+    512
+  ],
+  "document_vector_norm_range": [
+    0.9999998807907104,
+    1.0000001192092896
+  ],
+  "cached_vectors_reused": true,
+  "token_limit_change_invalidates_cache": true,
+  "refusals": [
+    "q007",
+    "q008",
+    "q014",
+    "q020",
+    "q023",
+    "q025",
+    "q037",
+    "q038",
+    "q039",
+    "q040"
+  ],
+  "answerable_refusals": [
+    "q014",
+    "q020",
+    "q023",
+    "q025"
+  ],
+  "missing_citation_questions": [
+    "q002",
+    "q003",
+    "q004",
+    "q005",
+    "q006",
+    "q009",
+    "q010",
+    "q011",
+    "q012",
+    "q015",
+    "q016",
+    "q018",
+    "q024",
+    "q026",
+    "q027",
+    "q029",
+    "q030",
+    "q031",
+    "q032",
+    "q033",
+    "q034",
+    "q035",
+    "q036"
+  ],
+  "invalid_citation_questions": [],
+  "baseline_report_hash": "7d22b02f371336646490d921e492e39c914ef2e6e301e79e4a7b330dae832d2b"
+}

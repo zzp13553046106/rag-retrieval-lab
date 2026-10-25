@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-25",
+  "source_sha256": "45555843bd30ca003a497566ca41c45726028cdce5a63d53953e904fa1120052",
+  "models": {
+    "embedding": {
+      "model": "BAAI/bge-small-zh-v1.5",
+      "revision": "7999e1d3359715c523056ef9478215996d62a620"
+    },
+    "reranker": {
+      "model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "revision": "1427fd652930e4ba29e8149678df786c240d8825"
+    },
+    "generator": {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+    }
+  },
+  "configuration": {
+    "candidate_k": 8,
+    "context_k": 3,
+    "rrf_constant": 60,
+    "embedding_max_tokens": 512,
+    "reranker_max_tokens": 512,
+    "seed": 42,
+    "device": "cpu",
+    "threads": 4
+  },
+  "network": "HF_HUB_OFFLINE=1; existing cached weights only",
+  "answer_review": "AI-assisted preliminary review, not human gold labels or a validated answer accuracy metric"
+}

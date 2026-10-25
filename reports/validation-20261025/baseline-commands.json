@@ -1,0 +1,22 @@
+[
+  {
+    "command": "prepare",
+    "exit_code": 0,
+    "elapsed_seconds": 4.748
+  },
+  {
+    "command": "evaluate",
+    "exit_code": 0,
+    "elapsed_seconds": 4.123
+  },
+  {
+    "command": "demo",
+    "exit_code": 0,
+    "elapsed_seconds": 9.66
+  },
+  {
+    "command": "ask",
+    "exit_code": 0,
+    "elapsed_seconds": 7.472
+  }
+]

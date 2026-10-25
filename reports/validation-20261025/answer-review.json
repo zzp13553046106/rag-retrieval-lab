@@ -1,0 +1,656 @@
+{
+  "review_status": "AI初步语义审核，待人工逐题复核；不是人工金标，不是可公布准确率",
+  "review_scope": "仅依据all-questions.json中的question、AI初稿reference_answer、给定evidence与真实本地Qwen answer；未运行模型、未修改源数据或原报告。",
+  "source_file": "all-questions-initial.json",
+  "source_sha256": "1e67ded276baafa75afa84ec567505b2c2624f3b7573106387f1949d3767002f",
+  "rubric": {
+    "correct": "回答实际问句的关键事实正确且给定证据支持；不要求逐字覆盖参考答案的额外解释。无答案题合理拒答也可正确。",
+    "partial": "包含正确内容，但遗漏题目关键内容、条件或混有未获证据支持的重要扩展。",
+    "incorrect": "核心结论、步骤、定义或条件错误，答非所问，或有答案题最终未回答；另区分生成忽略证据与检索上下文缺失。",
+    "needs_review": "现有材料不足以作稳定判断时保留人工复核；本轮未使用。",
+    "citation_policy": "引用缺失单列，不单独等同事实错误；合法引用ID也不自动代表引用支持结论。",
+    "counts_policy": "下列数字仅为AI初审分类计数，不能当作人工确认正确率或生产性能。"
+  },
+  "summary": {
+    "n_questions": 40,
+    "ai_preliminary_verdict_counts": {
+      "incorrect": 13,
+      "partial": 8,
+      "correct": 19
+    },
+    "clear_fact_or_procedure_errors": [
+      "q001",
+      "q003",
+      "q006",
+      "q013",
+      "q015",
+      "q016",
+      "q019",
+      "q028",
+      "q036"
+    ],
+    "answerable_refusal_with_answer_in_provided_evidence": [
+      "q014",
+      "q020",
+      "q023"
+    ],
+    "answerable_refusal_but_required_evidence_missing": [
+      "q025"
+    ],
+    "refusal_flag_false_positive": [
+      "q022"
+    ],
+    "appropriate_no_answer_refusals": [
+      "q007",
+      "q008",
+      "q037",
+      "q038",
+      "q039",
+      "q040"
+    ]
+  },
+  "reviews": [
+    {
+      "id": "q001",
+      "split": "dev",
+      "question": "AUTH_401_EXPIRED 怎么处理？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "wrong_action",
+      "reason": "正确指出令牌过期，但让用户采用版本冲突处理；access.token明确要求重新申请令牌并最多重试一次。",
+      "decisive_evidence_ids": [
+        "access.token",
+        "answer.conflict"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": false
+    },
+    {
+      "id": "q002",
+      "split": "dev",
+      "question": "文档太长应该怎么拆？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "unsupported_expansion",
+      "reason": "400字符与60字符重叠基本命中；遗漏标题/段落及句子边界，添加jieba、停用词等无证据操作，末句截断。",
+      "decisive_evidence_ids": [
+        "ingest.chunk"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q003",
+      "split": "dev",
+      "question": "为什么要合并两路检索的名次，而不是直接加分数？",
+      "verdict": "incorrect",
+      "evidence_support": "unsupported",
+      "error_category": "fabrication",
+      "reason": "未解释避免不同量纲原始分数相加；编造RFF及rank平方公式、RFF与RRF合并及同权重解释。",
+      "decisive_evidence_ids": [
+        "search.rrf"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q004",
+      "split": "dev",
+      "question": "正确材料根本没进入候选，重新排个序能救回来吗？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "“不能”直接回答问句，符合重排只能调整已召回候选的边界；可补充先检查Recall@8。",
+      "decisive_evidence_ids": [
+        "rerank.limit"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q005",
+      "split": "dev",
+      "question": "回答应该如何表明来自哪段资料？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "missing_specific_rule",
+      "reason": "“标明来源”方向正确，但未说明关键结论标注支持它的片段ID；时间戳要求没有证据。",
+      "decisive_evidence_ids": [
+        "answer.ground"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q006",
+      "split": "dev",
+      "question": "测评问题拿来调参数可以吗？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "overgeneralization",
+      "reason": "笼统禁止测评问题调参，遗漏并否定开发集可调参的条件；应区分开发集与保留测试集。“片段ID:2”也不是给定证据ID。",
+      "decisive_evidence_ids": [
+        "experiment.split"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q007",
+      "split": "dev",
+      "question": "团队负责人电话号码是多少？",
+      "verdict": "correct",
+      "evidence_support": "insufficient",
+      "error_category": null,
+      "reason": "给定证据没有负责人电话号码，资料不足拒答适当。",
+      "decisive_evidence_ids": [],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q008",
+      "split": "dev",
+      "question": "明年的订阅价格会涨多少？",
+      "verdict": "correct",
+      "evidence_support": "insufficient",
+      "error_category": null,
+      "reason": "给定证据没有明年订阅涨价信息，资料不足拒答适当。",
+      "decisive_evidence_ids": [],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q009",
+      "split": "test",
+      "question": "SEARCH_429_LIMIT 需要重新登录吗？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "正确回答不需要重新登录；可补充Retry-After、指数退避和60次/分钟限制，但实际问句的判断已回答。",
+      "decisive_evidence_ids": [
+        "ops.limit"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q010",
+      "split": "test",
+      "question": "SEARCH_504_TIMEOUT 的排查顺序是什么？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "检查向量查询和重排耗时，再缩小候选数或使用已校验缓存，顺序与证据一致。",
+      "decisive_evidence_ids": [
+        "ops.timeout"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q011",
+      "split": "test",
+      "question": "SEARCH_204_EMPTY 之后能不能搜别人的项目来回答？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "正确拒绝用别人的项目凑答案；可补充检查入库、权限和版本。",
+      "decisive_evidence_ids": [
+        "ops.empty",
+        "access.role"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q012",
+      "split": "test",
+      "question": "接口鉴权时令牌应放在哪里，能用多久？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "Authorization请求头与2小时均正确；可补充Bearer格式。",
+      "decisive_evidence_ids": [
+        "access.token"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q013",
+      "split": "test",
+      "question": "项目密钥更新后，旧的还能用一段时间吗？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "wrong_condition",
+      "reason": "虽复述30天轮换与24小时重叠，却推出旧密钥在轮换周期内不再有效；证据规定重叠期结束才失效。",
+      "decisive_evidence_ids": [
+        "access.rotate"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": false
+    },
+    {
+      "id": "q014",
+      "split": "test",
+      "question": "照片扫描出来的 PDF 上传后搜不到字，怎么办？",
+      "verdict": "incorrect",
+      "evidence_support": "answer_available_but_refused",
+      "error_category": "false_refusal_with_evidence",
+      "reason": "已提供ingest.formats，明确扫描PDF先OCR、空文本不直接索引，仍回答资料不足。",
+      "decisive_evidence_ids": [
+        "ingest.formats"
+      ],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q015",
+      "split": "test",
+      "question": "同一份文件反复上传怎样避免重复内容？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "wrong_procedure",
+      "reason": "要求每次生成新document_id，未使用内容SHA-256判断相同内容并跳过，还建议重复ID重新上传；不能实现证据规定的去重。",
+      "decisive_evidence_ids": [
+        "ingest.duplicate"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q016",
+      "split": "test",
+      "question": "检索器怎样找到用词不同但意思接近的内容？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "wrong_method",
+      "reason": "把异词同义召回归给BM25；证据说明Embedding语义检索擅长同义改写，BM25对完全不同措辞可能召回不足。",
+      "decisive_evidence_ids": [
+        "search.bm25",
+        "search.dense"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q017",
+      "split": "test",
+      "question": "为什么搜索错误编号时保留关键词匹配这一路？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "unsupported_expansion",
+      "reason": "提到关键词匹配减少遗漏，但未明确BM25适合错误码等精确词项；把Cross-Encoder描述为解决关键词不匹配及平衡准确性效率，没有证据，回答截断。",
+      "decisive_evidence_ids": [
+        "search.bm25",
+        "rerank.cross"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": false
+    },
+    {
+      "id": "q018",
+      "split": "test",
+      "question": "RRF 中一条资料在两路都出现会发生什么？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "missing_key_fact",
+      "reason": "合并为一个候选方向可接受，但遗漏两路1/(60+rank)贡献累加这一关键规则。",
+      "decisive_evidence_ids": [
+        "search.rrf"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q019",
+      "split": "test",
+      "question": "Bi-Encoder 和 Cross-Encoder 怎么分工？",
+      "verdict": "incorrect",
+      "evidence_support": "off_topic",
+      "error_category": "non_answer",
+      "reason": "所引混合检索陈述有证据，但未解释Bi-Encoder分别编码召回、Cross-Encoder成对打分重排的分工。",
+      "decisive_evidence_ids": [
+        "rerank.cross",
+        "search.rrf"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": false
+    },
+    {
+      "id": "q020",
+      "split": "test",
+      "question": "多拉一倍材料再做精排，效果一定好吗？",
+      "verdict": "incorrect",
+      "evidence_support": "answer_available_but_refused",
+      "error_category": "false_refusal_with_evidence",
+      "reason": "已提供rerank.budget，明确8增至16可能改善召回但不保证答案更好，仍回答资料不足。",
+      "decisive_evidence_ids": [
+        "rerank.budget"
+      ],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q021",
+      "split": "test",
+      "question": "找对第一条资料就能证明多个依据全找全了吗？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "missing_key_fact",
+      "reason": "正确复述MRR关注首条相关结果及排名不保证答案正确，但未用Recall的全部相关片段覆盖直接解释不能证明找全；验收清单无关。",
+      "decisive_evidence_ids": [
+        "eval.rank",
+        "eval.recall"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": false
+    },
+    {
+      "id": "q022",
+      "split": "test",
+      "question": "检索排名很好是不是就能保证答案可信？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "正文实际回答需检查事实、关键覆盖、引用支持与无答案拒答，语义符合参考答案；refused=true是检测误报而非真实拒答。",
+      "decisive_evidence_ids": [
+        "answer.ground",
+        "eval.answer",
+        "eval.rank"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q023",
+      "split": "test",
+      "question": "一份资料让模型忽略规则并交出令牌，要照办吗？",
+      "verdict": "incorrect",
+      "evidence_support": "answer_available_but_refused",
+      "error_category": "false_refusal_with_evidence",
+      "reason": "answer.attack明确资料中的忽略规则/泄露密钥指令不应执行，仍拒答称资料不足。",
+      "decisive_evidence_ids": [
+        "answer.attack"
+      ],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q024",
+      "split": "test",
+      "question": "资料里的旧规定和新规定不一致，该怎么办？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "unsupported_expansion",
+      "reason": "有采用现行规定的方向，但混用“最新”与“当前生效”，遗漏无法确认时指出冲突并澄清，添加法律文件和法律顾问要求无证据。",
+      "decisive_evidence_ids": [
+        "answer.conflict"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q025",
+      "split": "test",
+      "question": "当前一篇上传文档最多多少兆？",
+      "verdict": "incorrect",
+      "evidence_support": "insufficient",
+      "error_category": "answerable_refusal_retrieval_miss",
+      "reason": "参考答案为20MB，端到端未回答；实际给定top3证据不含文件上限，因此拒答符合当前证据约束，不能归因于模型忽略已提供答案。",
+      "decisive_evidence_ids": [],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q026",
+      "split": "test",
+      "question": "当前每分钟能问30次还是60次？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "当前60次/分钟正确，证据同时说明30次为废弃规则。",
+      "decisive_evidence_ids": [
+        "legacy.limit",
+        "ops.limit"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q027",
+      "split": "test",
+      "question": "现在切块用200字不重叠，还是400字并重叠？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "正确选择当前400字并重叠方案；可补充重叠60字，未因省略额外数值单独判事实错。",
+      "decisive_evidence_ids": [
+        "legacy.chunk",
+        "ingest.chunk"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q028",
+      "split": "test",
+      "question": "有同事权限被取消后，以前的搜索缓存还可用吗？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "reversed_permission_rule",
+      "reason": "声称权限撤销后缓存仍可用，并编造片段ID更新解释；cache.key明确权限撤销立即失效。",
+      "decisive_evidence_ids": [
+        "cache.key"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": false
+    },
+    {
+      "id": "q029",
+      "split": "test",
+      "question": "查一次请求为什么慢，应该保留什么记录？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "主问题所需request_id、分阶段耗时、候选ID、模型配置及默认不存正文均完整正确；附带无关验收清单略失真且末句截断。",
+      "decisive_evidence_ids": [
+        "cache.log",
+        "ops.timeout"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q030",
+      "split": "test",
+      "question": "日志和脱敏评测结果分别留多久？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "普通日志7天、脱敏评测90天均正确。",
+      "decisive_evidence_ids": [
+        "cache.retain"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q031",
+      "split": "test",
+      "question": "上传成功就代表立刻能搜到了吗？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "正确区分上传接收完成与索引ready；可补充通常5分钟内。",
+      "decisive_evidence_ids": [
+        "index.fresh"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q032",
+      "split": "test",
+      "question": "用户点删除后，什么时候看不到，向量什么时候清完？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "missing_key_condition",
+      "reason": "提及24小时清理，但遗漏先不可见和失效缓存，也把24小时目标说成必然完成，未完整区分可见性与物理删除。",
+      "decisive_evidence_ids": [
+        "index.delete"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q033",
+      "split": "test",
+      "question": "更换向量模型只改问题这一侧可以吗？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "“不可以”直接正确回答只改问题侧是否可行；可补充重建文档向量、新索引与固定集评测。",
+      "decisive_evidence_ids": [
+        "index.version",
+        "search.dense"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q034",
+      "split": "test",
+      "question": "查看私有资料的权限应该放在精排之前还是之后？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "正确回答权限检查在精排之前；更精确的完整规定是检索前先做项目成员权限检查。",
+      "decisive_evidence_ids": [
+        "access.role"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q035",
+      "split": "test",
+      "question": "混合检索加精排是否一定优于单路，应该怎样判断？",
+      "verdict": "partial",
+      "evidence_support": "partial",
+      "error_category": "missing_experimental_controls",
+      "reason": "正确表达不保证更优并需看质量和延迟；但主要讨论候选翻倍，遗漏BM25/向量/混合/混合重排四组对照和同语料、切分、问题集、最终top-k控制。",
+      "decisive_evidence_ids": [
+        "experiment.ablation",
+        "rerank.budget"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q036",
+      "split": "test",
+      "question": "HTTP 301 就是把搜索结果再排一次吗？",
+      "verdict": "incorrect",
+      "evidence_support": "contradicted",
+      "error_category": "reversed_definition",
+      "reason": "把HTTP301解释为搜索结果重排并否认重定向；legacy.redirect明确301是永久网址重定向，检索重排是Rerank。",
+      "decisive_evidence_ids": [
+        "legacy.redirect"
+      ],
+      "semantic_refusal": false,
+      "reported_refused": false,
+      "missing_citations": true
+    },
+    {
+      "id": "q037",
+      "split": "test",
+      "question": "这个系统的生产QPS能到多少？",
+      "verdict": "correct",
+      "evidence_support": "insufficient",
+      "error_category": null,
+      "reason": "给定证据没有生产QPS实测数据，拒答适当；每分钟查询配额不能替代生产吞吐量。",
+      "decisive_evidence_ids": [],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q038",
+      "split": "test",
+      "question": "Atlas 的创始人毕业于哪所大学？",
+      "verdict": "correct",
+      "evidence_support": "insufficient",
+      "error_category": null,
+      "reason": "给定证据没有创始人毕业学校，拒答适当。",
+      "decisive_evidence_ids": [],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q039",
+      "split": "test",
+      "question": "这个项目可以用哪张银行卡付款？",
+      "verdict": "correct",
+      "evidence_support": "insufficient",
+      "error_category": null,
+      "reason": "给定证据没有付款银行卡信息，拒答适当。",
+      "decisive_evidence_ids": [],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    },
+    {
+      "id": "q040",
+      "split": "test",
+      "question": "已经实现了多少真实用户满意度提升？",
+      "verdict": "correct",
+      "evidence_support": "supported",
+      "error_category": null,
+      "reason": "delivery.local说明没有真实用户满意度可推断结果，资料不足拒答适当。",
+      "decisive_evidence_ids": [
+        "delivery.local"
+      ],
+      "semantic_refusal": true,
+      "reported_refused": true,
+      "missing_citations": false
+    }
+  ],
+  "verification_note": "初审基于首轮40题输出。最终输出见all-questions.json；两轮模型答案与证据逐题一致，q022的refused诊断误报已在最终轮修复。AI初审分类不是人工确认准确率。"
+}

@@ -1,0 +1,28 @@
+test_calibration (test_core.RetrievalTests.test_calibration) ... ok
+test_evidence_ids_and_split (test_core.RetrievalTests.test_evidence_ids_and_split) ... ok
+test_fusion_rewards_agreement (test_core.RetrievalTests.test_fusion_rewards_agreement) ... ok
+test_identifier_and_unknown (test_core.RetrievalTests.test_identifier_and_unknown) ... ok
+test_mrr_and_ndcg (test_core.RetrievalTests.test_mrr_and_ndcg) ... ok
+test_multievidence_recall (test_core.RetrievalTests.test_multievidence_recall) ... ok
+test_empty_calibration_data_raises_value_error (test_regressions.CalibrationRegressionTests.test_empty_calibration_data_raises_value_error) ... ok
+test_nonfinite_calibration_scores_raise_value_error (test_regressions.CalibrationRegressionTests.test_nonfinite_calibration_scores_raise_value_error) ... ok
+test_only_answerable_calibration_data_raises_value_error (test_regressions.CalibrationRegressionTests.test_only_answerable_calibration_data_raises_value_error) ... ok
+test_only_unanswerable_calibration_data_raises_value_error (test_regressions.CalibrationRegressionTests.test_only_unanswerable_calibration_data_raises_value_error) ... ok
+test_empty_ranking_refuses_without_generator (test_regressions.GenerationRegressionTests.test_empty_ranking_refuses_without_generator) ... ok
+test_explicit_refusal_does_not_require_citation (test_regressions.GenerationRegressionTests.test_explicit_refusal_does_not_require_citation) ... ok
+test_invalid_citation_is_reported_without_marking_it_missing (test_regressions.GenerationRegressionTests.test_invalid_citation_is_reported_without_marking_it_missing) ... ok
+test_missing_citation_is_distinct_from_invalid_citation (test_regressions.GenerationRegressionTests.test_missing_citation_is_distinct_from_invalid_citation) ... ok
+test_refusal_policy_in_answer_body_is_not_a_refusal (test_regressions.GenerationRegressionTests.test_refusal_policy_in_answer_body_is_not_a_refusal) ... ok
+test_valid_citation_is_present_and_not_invalid (test_regressions.GenerationRegressionTests.test_valid_citation_is_present_and_not_invalid) ... ok
+test_config_rejects_unsupported_or_nonpositive_values (test_regressions.InputValidationRegressionTests.test_config_rejects_unsupported_or_nonpositive_values) ... ok
+test_default_config_is_valid (test_regressions.InputValidationRegressionTests.test_default_config_is_valid) ... ok
+test_rank_rejects_negative_limit_and_accepts_zero (test_regressions.InputValidationRegressionTests.test_rank_rejects_negative_limit_and_accepts_zero) ... ok
+test_rrf_rejects_negative_or_nonfinite_constant (test_regressions.InputValidationRegressionTests.test_rrf_rejects_negative_or_nonfinite_constant) ... ok
+test_whitespace_query_rejected_before_engine_access (test_regressions.InputValidationRegressionTests.test_whitespace_query_rejected_before_engine_access) ... ok
+test_embedding_tokenizer_receives_configured_limit (test_regressions.TokenLimitRegressionTests.test_embedding_tokenizer_receives_configured_limit) ... ok
+test_reranker_tokenizer_receives_configured_limit (test_regressions.TokenLimitRegressionTests.test_reranker_tokenizer_receives_configured_limit) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.358s
+
+OK

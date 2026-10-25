@@ -40,7 +40,7 @@ python3.12 -m venv .venv
 
 `run.sh` 优先使用项目 `.venv`。`RAG_PYTHON` 可指定解释器，`RAG_CACHE` 可指定模型与向量缓存。本机原始工作目录另有已配置的环境，脚本会自动识别。
 
-`model-lock.json` 记录实际模型提交版本。`requirements.txt` 固定直接依赖，`requirements-lock.txt` 记录原环境新增依赖；新环境完整依赖解析仍由 pip 完成。修改资料或模型版本会触发文档向量重建。
+`model-lock.json` 记录实际模型提交版本。`requirements.txt` 固定直接依赖，`requirements-lock.txt` 记录原环境新增依赖；新环境完整依赖解析仍由 pip 完成。修改资料、向量模型版本或向量编码截断长度会触发文档向量重建。
 
 ## 首轮检索结果
 
@@ -98,7 +98,11 @@ tests/test_core.py     核心检索与评测逻辑验证
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-现有6项验证覆盖多证据Recall、MRR/nDCG、RRF融合、错误码匹配、证据ID完整性与开发集阈值校准。它们不下载模型。模型端到端结果见 `reports/`。
+现有23项验证覆盖多证据Recall、MRR/nDCG、RRF融合、错误码匹配、证据ID完整性、开发集阈值校准，以及空候选、无效配置、空问题、非有限分数、引用缺失、拒答标记和截断长度配置等回归情况。它们不下载模型；模型相关单元测试使用小张量和替身对象。
+
+`embedding_max_tokens` 与 `reranker_max_tokens` 分别控制对应模型的输入截断长度；当前实现只支持CPU。问答输出的 `missing_citations` 标记非拒答结果是否缺少引用；`invalid_citations` 列出已经出现但不属于提供证据的编号。两者均不判断引用是否在语义上支持结论。
+
+完整真实模型复测与保留的结果见 [完整测试记录](reports/完整测试记录.md)，首轮模型输出仍保存在原有 `reports/` 文件中。
 
 报告中的 `run-manifest.json` 保留原运行的文件摘要与环境；后来添加注释会改变源码摘要，不覆盖原实验记录。
 

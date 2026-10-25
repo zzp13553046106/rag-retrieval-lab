@@ -1,0 +1,58 @@
+[
+  {
+    "command": "unit",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 0.971
+  },
+  {
+    "command": "dependencies",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 0.183
+  },
+  {
+    "command": "shell",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 0.004
+  },
+  {
+    "command": "prepare",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 3.808
+  },
+  {
+    "command": "evaluate",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 3.919
+  },
+  {
+    "command": "demo",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 9.06
+  },
+  {
+    "command": "ask",
+    "exit_code": 0,
+    "expected_exit_code": 0,
+    "passed": true,
+    "elapsed_seconds": 7.523
+  },
+  {
+    "command": "blank-ask",
+    "exit_code": 2,
+    "expected_exit_code": 2,
+    "passed": true,
+    "elapsed_seconds": 0.06
+  }
+]
