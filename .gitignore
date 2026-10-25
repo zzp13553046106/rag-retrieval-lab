@@ -1,4 +1,16 @@
+# Python环境与生成文件
 .venv/
-.cache/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+# 模型、向量缓存及本机文件
+.cache/
+.DS_Store
+*.safetensors
+*.onnx
+*.pt
+# 本地密钥或配置，不进入公开仓库
+.env
+.env.*
+!.env.example

@@ -16,6 +16,13 @@
 # - 数组下标：如0、5、12，供程序从 self.chunks / self.texts 中取片段。
 # - 证据ID：如 "search.dense"，供答案引用和评测标签使用。
 # search()返回的排名主要是数组下标，输出报告时才转换为证据ID。
+#
+# 面向AI应用/算法学习的阅读目标：
+# - 应用：能追踪数据、改流程、排查失败；不要只记住模型名称。
+# - 算法：进一步解释打分公式、向量维度、排序指标及实验的公平性。
+# - 本文件只调用已训练模型；没有loss.backward()或优化器更新参数。
+#   理解这里的推理流程，不等于已经掌握模型训练或LoRA微调。
+# 配套练习见learning/01_search.md，完成后把自己的观察记录在Git提交里。
 from __future__ import annotations
 import argparse, collections, hashlib, json, math, os, platform, re, statistics, time
 from pathlib import Path
@@ -69,7 +76,8 @@ def load_chunks():
                     # 目标约400个字符，保留末尾60字符作为相邻片段重叠。
                     # 重叠用于保留上下文；这不是严格的400字符硬上限，
                     # 一句特别长的文本仍可能超过目标长度。
-                    parts.append(buf); buf = buf[-60:]
+                    parts.append(buf)
+                    buf = buf[-60:]
                 buf += sentence
             if buf.strip(): parts.append(buf)
             for n, part in enumerate(parts):
@@ -97,6 +105,8 @@ def tokens(text):
 class BM25:
     # BM25是关键词相关性打分：出现了什么词、出现几次、片段有多长。
     # 它不调用大模型，也不需要监督训练。
+    # 算法自测：稀有词为什么权重较高？同一个词重复100次会让得分线性增长吗？
+    # 应用自测：错误码适合关键词检索，但“兆”和“MB”怎样才能匹配？
     def __init__(self, texts):
         # Counter把片段变成“词 → 出现次数”的词频表。
         self.docs = [collections.Counter(tokens(x)) for x in texts]
@@ -128,6 +138,9 @@ def rrf(rankings, constant=60):
     # 原因：BM25分数与向量相似度不在同一量纲，不能直接比较大小。
     # 例子仅用于理解：某片段在两路都是第1名，贡献为2/(60+1)；
     # 只在一路排第1名，贡献为1/(60+1)。同一片段跨路出现会累加。
+    # 这里的rank从1开始，与Python数组下标从0开始不同。
+    # 算法自测：constant变大时，前几名的贡献差距会怎样变化？
+    # 融合分数只表达这套规则下的排序偏好，不代表资料绝对正确。
     scores = collections.defaultdict(float)
     for ranking in rankings:
         for position, idx in enumerate(ranking, 1): scores[idx] += 1/(constant+position)
@@ -137,7 +150,8 @@ def metrics(ids, relevant, k=3):
     # ids：实际检索排名（证据ID）；relevant：人工/初稿标签要求的相关证据。
     # 无答案题没有“应该找出的证据”，单独评估拒答，不混入检索召回率。
     if not relevant: return None
-    relevant = set(relevant); found = [int(x in relevant) for x in ids[:k]]
+    relevant = set(relevant)
+    found = [int(x in relevant) for x in ids[:k]]
     dcg = sum(v/math.log2(i+2) for i,v in enumerate(found))
     ideal = sum(1/math.log2(i+2) for i in range(min(k, len(relevant))))
     # Recall@k：前k条找到了全部标准证据中的多少；找到2/3条就是2/3。
@@ -158,8 +172,10 @@ class Engine:
         from transformers import AutoTokenizer, AutoModel, AutoModelForSequenceClassification
         from huggingface_hub import snapshot_download
         # 固定随机种子和CPU线程数，减少实验环境变化带来的影响。
-        torch.set_num_threads(CONFIG['threads']); torch.manual_seed(CONFIG['seed'])
-        self.torch = torch; self.chunks = load_chunks()
+        torch.set_num_threads(CONFIG['threads'])
+        torch.manual_seed(CONFIG['seed'])
+        self.torch = torch
+        self.chunks = load_chunks()
         self.texts = [c['title']+'。'+c['text'] for c in self.chunks]
         self.bm25 = BM25(self.texts)
         # 模型锁文件记录下载时的具体提交版本，避免上游更新后悄悄换模型。
@@ -194,7 +210,8 @@ class Engine:
         if vecpath.exists(): self.vectors = np.load(vecpath)
         else:
             self.vectors = self.encode(self.texts)
-            CACHE.mkdir(parents=True, exist_ok=True); np.save(vecpath, self.vectors)
+            CACHE.mkdir(parents=True, exist_ok=True)
+            np.save(vecpath, self.vectors)
         if generator:
             # gt/gm对应回答模型。三个角色的权重独立，不应混用。
             from transformers import AutoModelForCausalLM
@@ -204,6 +221,8 @@ class Engine:
     def encode(self, texts):
         # 输入是字符串列表，输出是形状为[N, D]的NumPy数组：
         # N条文本各对应一个D维向量；单条文本也先作为长度为1的列表传入。
+        # 应用自测：更换向量模型后，为什么必须重建文档向量？
+        # 算法自测：单位向量点积为什么等于余弦相似度？
         result=[]
         for start in range(0, len(texts), 16):
             # 每批最多16条。padding补齐批内长度，truncation截断超长输入。
@@ -223,6 +242,8 @@ class Engine:
         # 输出：重排后的下标列表 + “证据ID → 重排分数”字典。
         # Cross-Encoder同时看问题和片段，可分析二者交互；
         # 向量召回则分别编码二者，查询时直接比较已有向量，开销通常更低。
+        # 应用自测：正确片段不在candidates里时，重排为什么无法补救？
+        # 算法自测：分别编码为何适合大规模召回，联合编码为何通常只做精排？
         scores=[]
         for start in range(0,len(candidates),8):
             batch=candidates[start:start+8]
@@ -253,14 +274,21 @@ class Engine:
         # rerank(query, h)只看h，所以无法把12找回来。
         # 这时要检查候选融合与截断策略；只换重排模型解决不了候选缺失。
         #
+        # 改代码前先写假设：增大candidate_k可能减少候选丢失，
+        # 也会增加重排计算量、引入干扰；增大context_k可能帮助多证据题，
+        # 也可能让回答模型更容易受无关资料影响。需要在开发集上验证。
+        # 记录配置和逐题变化，不要用同一测试题反复调参后再报告独立提升。
+        #
         # 【最先阅读这个方法】输入query是一句用户问题。
         # 例如：“上传的文档最大能有多少兆？”下面执行四个阶段。
         # time.perf_counter()只记录耗时，不参与相关性计算。
 
         # ① BM25关键词检索。
         # bs：每个片段的BM25分数；b：按分数选出的前8个片段下标。
-        start=time.perf_counter(); bs=self.bm25.scores(query)
-        b=rank(bs,CONFIG['candidate_k']); bm_ms=(time.perf_counter()-start)*1000
+        start=time.perf_counter()
+        bs=self.bm25.scores(query)
+        b=rank(bs,CONFIG['candidate_k'])
+        bm_ms=(time.perf_counter()-start)*1000
 
         # ② 语义向量检索。
         # 给短查询加上BGE的检索指令，文档向量不加这个前缀。
@@ -270,19 +298,22 @@ class Engine:
         # self.vectors是[N, D]，q是[D]；@得到长度为N的相似度数组ds。
         # 文档向量在初始化时已经准备好，不是每问一次就重新编码全文。
         # d：语义相似度最高的前8个片段下标。
-        ds=self.vectors@q; d=rank(ds,CONFIG['candidate_k'])
+        ds=self.vectors@q
+        d=rank(ds,CONFIG['candidate_k'])
         dense_ms=(time.perf_counter()-start)*1000
 
         # ③ 混合检索：融合b和d的名次，再只留下8个候选，得到h。
         # 两路各8个，去重后的并集最多16个，但最终h仍最多8个。
         # 重要：某条正确资料即使已被一路召回，也可能在这里被截掉。
-        start=time.perf_counter(); h=rrf([b,d],CONFIG['rrf_constant'])[:CONFIG['candidate_k']]
+        start=time.perf_counter()
+        h=rrf([b,d],CONFIG['rrf_constant'])[:CONFIG['candidate_k']]
         fusion_ms=(time.perf_counter()-start)*1000
 
         # ④ 重排序：问题与h中的候选成对送入重排模型，得到排名r。
         # 重排只调整已有候选顺序，无法找回不在h中的片段。
         # 它与“把问题改写后重新搜索”不同，本代码没有实现查询改写。
-        start=time.perf_counter(); r, scores=self.rerank(query,h)
+        start=time.perf_counter()
+        r, scores=self.rerank(query,h)
         rerank_ms=(time.perf_counter()-start)*1000
 
         # 一次返回三项：四种排名、重排分数、各方案对应阶段的累计耗时。
@@ -292,6 +323,8 @@ class Engine:
             'bm25':bm_ms, 'dense':dense_ms, 'hybrid':bm_ms+dense_ms+fusion_ms,
             'rerank':bm_ms+dense_ms+fusion_ms+rerank_ms}
     def generate(self, question, ranked, scores, threshold):
+        # 应用自测：为什么“提供了正确资料”仍可能得到错误答案？
+        # 回答质量至少看事实、条件覆盖、引用支持和无答案时的拒答。
         # ranked是重排后的下标列表；先选前3条，再取出完整片段对象。
         selected=ranked[:CONFIG['context_k']]
         evidence=[self.chunks[i] for i in selected]
@@ -309,7 +342,8 @@ class Engine:
                   {'role':'user','content':f'资料：\n{context}\n\n问题：{question}'}]
         text=self.gt.apply_chat_template(messages,tokenize=False,add_generation_prompt=True)
         # 聊天模板转换成模型需要的对话格式，随后再编码成token。
-        inp=self.gt(text,return_tensors='pt'); start=time.perf_counter()
+        inp=self.gt(text,return_tensors='pt')
+        start=time.perf_counter()
         with self.torch.inference_mode():
             output=self.gm.generate(**inp,max_new_tokens=180,do_sample=False,
                 pad_token_id=self.gt.eos_token_id)
@@ -336,7 +370,8 @@ def calibrate(rows):
         # pos是有答案题，neg是无答案题。
         # 平衡准确率 = (有答案题放行比例 + 无答案题拦截比例) / 2，
         # 避免哪一类题数量多，哪一类就主导阈值选择。
-        pos=[r for r in rows if r['relevant_ids']]; neg=[r for r in rows if not r['relevant_ids']]
+        pos=[r for r in rows if r['relevant_ids']]
+        neg=[r for r in rows if not r['relevant_ids']]
         return (sum(r['top_score']>=t for r in pos)/len(pos)+sum(r['top_score']<t for r in neg)/len(neg))/2
     best=max(candidates,key=lambda t:(score(t),-t))
     # 分数相同选较低阈值。这里只有8道开发题，不能推断生产可靠性。
@@ -345,7 +380,10 @@ def calibrate(rows):
 def evaluate(engine):
     # 固定题目、语料、最终top-3，比较四种检索方案。
     # evaluate不会生成答案；它评测资料检索和分数门控，不是问答正确率。
-    qs=read_jsonl(ROOT/'data/questions.jsonl'); ids={c['id'] for c in engine.chunks}
+    # 算法自测：一次比较中，语料、标签、top-k和模型版本哪些保持不变？
+    # 如果只根据看到的错误修改标签/参数，下一轮怎样获得新的保留测试题？
+    qs=read_jsonl(ROOT/'data/questions.jsonl')
+    ids={c['id'] for c in engine.chunks}
     for q in qs:
         # 先检查标签ID存在，防止用已经删除/改名的证据计算错误指标。
         if not set(q['relevant_ids'])<=ids: raise ValueError(q['id']+' 标签ID不存在')
@@ -377,7 +415,8 @@ def evaluate(engine):
              'label_status':'全部为AI合成初稿，待人工审核；测试结果是小规模内部冒烟评测',
              'calibration':threshold,'splits':{}}
     for split in ['dev','test']:
-        subset=[r for r in rows if r['split']==split]; answerable=[r for r in subset if r['relevant_ids']]
+        subset=[r for r in rows if r['split']==split]
+        answerable=[r for r in subset if r['relevant_ids']]
         # 检索指标只在有答案题上计算，无答案题在下方单独计算拒答门控。
         result={'total':len(subset),'answerable':len(answerable),'unanswerable':len(subset)-len(answerable),'methods':{}}
         for method in ['bm25','dense','hybrid','rerank']:
@@ -413,7 +452,8 @@ def evaluate(engine):
     lines+=['','## 需要逐题审核的案例','', '以下列出重排后仍缺证据，或相比混合检索变好的/变差的案例。原始排序见 retrieval-details.json。','']
     for r in rows:
         if r['split']!='test' or not r['relevant_ids']: continue
-        before=metrics(r['rankings']['hybrid'],r['relevant_ids']); after=metrics(r['rankings']['rerank'],r['relevant_ids'])
+        before=metrics(r['rankings']['hybrid'],r['relevant_ids'])
+        after=metrics(r['rankings']['rerank'],r['relevant_ids'])
         # 既保留重排后仍缺证据的题，也保留指标发生变化的题，便于归因。
         # 看这些案例时，要同时考虑资料标签是否合理，而不只怀疑模型。
         if after['recall']<1 or before!=after:
@@ -429,18 +469,26 @@ def main():
     # ./run.sh evaluate     跑固定检索评测，保存报告和开发集阈值。
     # ./run.sh demo         跑6个预选展示案例，保留原始回答。
     # ./run.sh ask '问题'   用自己的问题走完整条检索与回答链路。
-    p=argparse.ArgumentParser(); sub=p.add_subparsers(dest='command',required=True)
-    sub.add_parser('evaluate'); sub.add_parser('prepare')
+    p=argparse.ArgumentParser()
+    sub=p.add_subparsers(dest='command',required=True)
+    sub.add_parser('evaluate')
+    sub.add_parser('prepare')
     sub.add_parser('demo')
-    ask=sub.add_parser('ask'); ask.add_argument('question')
+    ask=sub.add_parser('ask')
+    ask.add_argument('question')
     args=p.parse_args()
     # 只做检索评测时，不必加载回答模型；其余三种命令会加载。
-    start=time.perf_counter(); e=Engine(generator=args.command in ['demo','ask','prepare'])
+    start=time.perf_counter()
+    e=Engine(generator=args.command in ['demo','ask','prepare'])
     load_ms=(time.perf_counter()-start)*1000
-    if args.command=='prepare': print('模型已下载，版本写入 model-lock.json'); return
+    if args.command=='prepare':
+        print('模型已下载，版本写入 model-lock.json')
+        return
     if args.command=='evaluate':
-        result=evaluate(e); result['startup_and_index_ms']=load_ms
-        write_json(ROOT/'reports/retrieval-summary.json',result); return
+        result=evaluate(e)
+        result['startup_and_index_ms']=load_ms
+        write_json(ROOT/'reports/retrieval-summary.json',result)
+        return
     calibration=ROOT/'reports/calibration.json'
     # 回答前先检查有没有开发集确定的门控阈值，避免临时随意指定。
     if not calibration.exists(): raise SystemExit('请先运行 evaluate，在开发集确定门控阈值。')
@@ -457,7 +505,8 @@ def main():
         rankings,scores,times=e.search(q['question'])
         answer=e.generate(q['question'],rankings['rerank'],scores,threshold)
         record={**q,**answer,'retrieval_ms':times['rerank'],'startup_and_index_ms':load_ms}
-        results.append(record); print(json.dumps(record,ensure_ascii=False),flush=True)
+        results.append(record)
+        print(json.dumps(record,ensure_ascii=False),flush=True)
     if args.command=='demo':
         # 保存模型原始输出，不用人工改写后的“正确答案”替换它。
         write_json(ROOT/'reports/answer-cases.json',results)
