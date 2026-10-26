@@ -71,8 +71,9 @@ python3.12 -m venv .venv
 ## 阅读与学习
 
 1. [第一课：追踪 search() 的四份排名](learning/01_search.md)。先理解输入输出，再看公式。
-2. [技术实践与简历记录](你的参与与简历.md)。围绕代码修改、实验与错误分析记录实际贡献。
-3. [rag.py](rag.py)：主要实现；`search → rrf/rerank → generate → metrics/evaluate → encode` 是推荐阅读顺序。
+2. [核心函数练习说明](learning/核心函数练习说明.md)：对应的[参考摘录](learning/core_functions_reference.py)与[练习骨架](learning/core_functions_practice.py)，用于分函数练习，不替换主程序。
+3. [技术实践与简历记录](你的参与与简历.md)。围绕代码修改、实验与错误分析记录实际贡献。
+4. [rag.py](rag.py)：主要实现；`search → rrf/rerank → generate → metrics/evaluate → encode` 是推荐阅读顺序。
 
 建议每次只完成一个小改动：先记录假设，在开发集验证，再用 Git 提交保留配置、观察与结论。若已根据本轮测试题设计改进，下一轮需要新增未参与设计的测试题。
 
